@@ -1,0 +1,125 @@
+<?php $this->load->view('errors'); ?>
+
+<div class="fm_top_nav">
+	<div class="fm_nav">
+		<span class="button"> 
+			<a class="nav_button" href="<?php echo $url_base.'edit_profile&profile_id='.$profile_id; ?>" ><?php echo lang('edit_profile')?></a>
+		</span>	
+		<span class="button"> 
+			<a class="nav_button" href="<?php echo $url_base.'add_profile'; ?>" ><?php echo lang('add_profile')?></a>
+		</span>						
+	</div>
+</div>
+
+<br clear="all" />
+<div>
+<?php 
+$this->table->set_heading(lang('name'), lang('type'), lang('total_flags'),lang('status'));
+$data = array(
+		$profile_data['name'], 
+		lang($profile_data['type']), 
+		$profile_data['total_flags'],
+		($profile_data['active'] == '1' ? lang('active') : lang('inactive')),
+);
+$this->table->add_row($data);
+echo $this->table->generate();
+$this->table->clear();
+?>
+</div>
+
+
+<div id="my_accordion">
+	<div class="fm_top_nav">
+		<div class="fm_nav">
+			<span class="button"> 
+				<a class="nav_button" href="<?php echo $url_base.'add_option'.AMP.'profile_id='.$profile_id; ?>" ><?php echo lang('add_option')?></a>
+			</span>						
+		</div>
+	</div>
+<h3  class="accordion">Flag Options</h3>
+<div id="flag_options">
+	<?php 
+	
+	if(count($flag_options) > 0): 
+
+		echo form_open($query_base.'delete_option_confirm', array('id'=>'profile_options'));
+		$this->table->clear();
+		$this->table->set_template($cp_pad_table_template);
+		$this->table->set_heading(
+			lang('name'),
+			lang('total_flags'),
+			form_checkbox('select_all', 'true', FALSE, 'class="toggle_all_files" id="select_all"').NBS.lang('delete', 'select_all')
+		);
+		
+		foreach($flag_options as $option)
+		{
+			$toggle = array(
+					  'name'		=> 'toggle[]',
+					  'id'		=> 'edit_box_'.$option['id'],
+					  'value'		=> $option['id'],
+					  'class'		=>'toggle_files'
+					  );
+		
+			$this->table->add_row(
+									'<a href="'.$url_base.'view_option'.AMP.'option_id='.$option['id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
+									$option['total_flags'],
+									form_checkbox($toggle)
+									);
+		}
+		
+		echo $this->table->generate();	
+	else: 
+		echo lang('no_flag_options'); 
+	endif; ?>
+	<div class="tableFooter">
+		<div class="tableSubmit">
+			<?php echo form_submit(array('name' => 'submit', 'value' => lang('delete_selected'), 'class' => 'submit'));?>
+		</div>
+	</div>	
+	<?php echo form_close()?>		
+</div>
+
+<h3  class="accordion">Flagged Items</h3>
+<div id="profile_flags">
+	<?php 
+	
+	if(count($flag_options) > 0): 
+
+		echo form_open($query_base.'delete_option_confirm', array('id'=>'profile_options'));
+		$this->table->clear();
+		$this->table->set_template($cp_pad_table_template);
+		$this->table->set_heading(
+			lang('name'),
+			lang('total_flags'),
+			form_checkbox('select_all', 'true', FALSE, 'class="toggle_all_files" id="select_all"').NBS.lang('delete', 'select_all')
+		);
+		
+		foreach($flag_options as $option)
+		{
+			$toggle = array(
+					  'name'		=> 'toggle[]',
+					  'id'		=> 'edit_box_'.$option['id'],
+					  'value'		=> $option['id'],
+					  'class'		=>'toggle_files'
+					  );
+		
+			$this->table->add_row(
+									'<a href="'.$url_base.'view_option'.AMP.'option_id='.$option['id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
+									$option['total_flags'],
+									form_checkbox($toggle)
+									);
+		}
+		
+		echo $this->table->generate();	
+	else: 
+		echo lang('no_flag_options'); 
+	endif; ?>
+	<div class="tableFooter">
+		<div class="tableSubmit">
+			<?php echo form_submit(array('name' => 'submit', 'value' => lang('delete_selected'), 'class' => 'submit'));?>
+		</div>
+	</div>	
+	<?php echo form_close()?>		
+</div>
+
+</div>
