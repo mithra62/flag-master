@@ -146,7 +146,8 @@ class Flag_master_mcp
 	
 	public function view_profile()
 	{
-		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->cp->add_js_script('ui', 'accordion', 'sortable');
+		$this->EE->javascript->output($this->EE->flag_master_js->get_sortable());
 		$this->EE->javascript->compile();
 		
 		$vars = array();
@@ -347,6 +348,26 @@ class Flag_master_mcp
 		$vars['profile_id'] = $option_data['profile_id'];
 		$vars['child_options'] = array();
 		return $this->EE->load->view('view_option', $vars, TRUE);		
+	}
+	
+	public function order_options()
+	{
+		$option_ids = $this->EE->input->get_post('option_id', FALSE);	
+		if(!$option_ids)
+		{
+			echo json_encode(array('status' => 'Failue'));
+			exit;
+		}
+		
+		$order = 0;
+		foreach($option_ids AS $option_id)
+		{
+			$this->EE->flag_master_profile_options->update_option_order($option_id, $order);
+			$order++;
+		}
+		
+		echo json_encode(array('status' => 'Success'));
+		exit;
 	}
 	
 	public function view_entry_flags()

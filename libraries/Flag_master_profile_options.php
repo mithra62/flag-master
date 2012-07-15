@@ -34,9 +34,9 @@ class Flag_master_profile_options
 		return $this->EE->flag_master_options_model->get_options($where);
 	}
 	
-	public function get_profile_option(array $where)
+	public function get_profile_option(array $where, $order = FALSE)
 	{
-		return $this->EE->flag_master_options_model->get_option($where);
+		return $this->EE->flag_master_options_model->get_option($where, $order);
 	}	
 	
 	public function add_profile_option($profile_id, $data)
@@ -76,6 +76,12 @@ class Flag_master_profile_options
 		$table = $this->EE->db->dbprefix.$this->EE->flag_master_options_model->get_table();
 		return $this->EE->db->query("UPDATE $table SET total_flags = total_flags+$count WHERE id='$option_id'");
 	}	
+	
+	public function update_option_order($option_id, $order = '0')
+	{
+		$table = $this->EE->db->dbprefix.$this->EE->flag_master_options_model->get_table();
+		return $this->EE->db->query("UPDATE $table SET sort_order = '$order' WHERE id='$option_id'");		
+	}
 	
 	/**
 	 * Removes a profile and all associated data

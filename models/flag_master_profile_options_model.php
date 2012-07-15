@@ -73,13 +73,21 @@ class Flag_master_profile_options_model extends CI_Model
 		return $this->db->insert($this->_table, $data); 
 	}	
 	
-	public function get_options(array $where = array())
+	public function get_options(array $where = array(), $order = FALSE)
 	{
 		foreach($where AS $key => $value)
 		{
 			$this->db->where($key, $value);
 		}
 		
+		if(!$order)
+		{
+			$this->db->order_by('sort_order asc');
+		}
+		else
+		{
+			$this->db->order_by($order);
+		}
 		$query = $this->db->get($this->_table);
 		$data = $query->result_array();
 		return $data;

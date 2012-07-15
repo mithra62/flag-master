@@ -33,6 +33,52 @@ class Flag_master_js
 		return ' $("#my_accordion").accordion({autoHeight: false,header: "h3"}); ';
 	}
 	
+	public function get_sortable()
+	{
+		return array(
+			'
+			var time = new Date().getTime();
+			var fixHelper = function(e, ui) {
+					ui.children().each(function() {
+						$(this).width($(this).width());
+					});
+					return ui;
+				};				
+				
+				$( "#flag_options tbody" ).sortable({
+				placeholder: "ui-state-highlight",
+				helper: fixHelper
+				
+			}).disableSelection();
+				
+			$( "#flag_options tbody" ).bind( "sortstop", function(event, ui) {
+				var ids = $("#flag_options tbody").sortable("serialize");
+				ids = ids+ "&" +$.param({ "XID": EE.XID});
+				
+				
+				request = $.ajax({
+				  url: EE.BASE+"&C=addons_modules&M=show_module_cp&module=flag_master&method=order_options&time=" + time,
+				  type: "POST",
+				  data: ids
+				});			
+
+				request.done(function(msg) {
+				$("#flag_options table").tablesorter({ 
+				    widgets: ["zebra"] 
+				    }); 				  
+				});
+				
+				request.fail(function(jqXHR, textStatus) {
+				  console.debug(jqXHR);
+				})				
+			});
+
+			'	
+				
+		);
+		
+	}
+	
 	public function get_check_toggle()
 	{
 		return array(

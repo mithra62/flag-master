@@ -41,5 +41,37 @@ $url .= 'mithra62.com';
 	font-size:14px;
 }
 
+.fm_nav {
+	//padding:			0 25px;
+	float: left;
+}
+
+.fm_nav span.button {
+	float:				  left;
+	margin-bottom:  10px;
+    margin-right: 6px;
+}
+ .fm_nav .nav_button {
+	font-weight:	normal;
+	background:		#d0d9e1;
+	color:			#34424b;
+}
+
+.fm_nav span.button a.nav_button{
+	color: #34424b;
+    font: 12px/12px Arial, 'Hevlvetica Neue', sans-serif;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.fm_nav span.button a.nav_button:hover {
+	background-color:#e11842;
+	text-decoration:none;
+	color: #fff;
+}
+.fm_nav span.button a.current {
+	background-color:#e11842;
+	text-decoration:none;
+	color: #fff;
+}
 </style>
 <link href="<?php echo $theme_folder_url; ?>third_party/cartthrob/css/cartthrob.css" rel="stylesheet" type="text/css" />

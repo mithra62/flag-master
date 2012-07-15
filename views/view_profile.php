@@ -41,16 +41,22 @@ $this->table->clear();
 	<?php 
 	
 	if(count($flag_options) > 0): 
-
+	
 		echo form_open($query_base.'delete_option_confirm', array('id'=>'profile_options'));
-		$this->table->clear();
-		$this->table->set_template($cp_pad_table_template);
-		$this->table->set_heading(
-			lang('name'),
-			lang('total_flags'),
-			form_checkbox('select_all', 'true', FALSE, 'class="toggle_all_files" id="select_all"').NBS.lang('delete', 'select_all')
-		);
-		
+	?>
+	<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Total Flags</th>
+			<th>
+				<input type="checkbox" name="select_all" value="true" class="toggle_all_files" id="select_all" />&nbsp;
+				<label for="select_all">Delete</label>
+			</th>
+		</tr>
+	</thead>
+	<tbody>	
+	<?php 
 		foreach($flag_options as $option)
 		{
 			$toggle = array(
@@ -59,15 +65,20 @@ $this->table->clear();
 					  'value'		=> $option['id'],
 					  'class'		=>'toggle_files'
 					  );
-		
-			$this->table->add_row(
-									'<a href="'.$url_base.'view_option'.AMP.'option_id='.$option['id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
-									$option['total_flags'],
-									form_checkbox($toggle)
-									);
+			echo '<tr rel="option_id" rel_value="'.$option['id'].'" id="option_id_'.$option['id'].'">
+					<td style="cursor:move;">
+						<a href="'.$url_base.'view_option'.AMP.'option_id='.$option['id'].'">'.$option['title'].'</a><div class="subtext">'.$option['description'].'</div>
+					</td>
+					<td>
+						'.$option['total_flags'].'
+					</td>
+					<td>
+						'.form_checkbox($toggle).'
+					</td>												
+				  </tr>';
 		}
-		
-		echo $this->table->generate();	
+		echo '</tbody></table>';
+			
 	else: 
 		echo lang('no_flag_options'); 
 	endif; ?>
@@ -75,7 +86,8 @@ $this->table->clear();
 		<div class="tableSubmit">
 			<?php echo form_submit(array('name' => 'submit', 'value' => lang('delete_selected'), 'class' => 'submit'));?>
 		</div>
-	</div>	
+	</div>
+	<input type="hidden" name="profile_id" value="<?php echo $profile_id; ?>" id="profile_id" />	
 	<?php echo form_close()?>		
 </div>
 
