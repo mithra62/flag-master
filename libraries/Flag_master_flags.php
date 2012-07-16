@@ -117,6 +117,12 @@ class Flag_master_flags
 			return FALSE;
 		}
 		
+		$profile_data = $this->EE->flag_master_profiles->get_profile(array('id' => $profile_id));
+		if(!$profile_data)
+		{
+			return lang('no_profile');
+		}
+		
 		$option_data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $data['option_id']));
 		$data['option_id'] = $data['option_id'];
 		$data['entry_id'] = $entry_id;
@@ -145,13 +151,13 @@ class Flag_master_flags
 		if(!$cookie)
 		{
 			$tracker = array();
-			$tracker[$entry_id] = array('profile_id' => $profile_id, 'option_id' => $option_id);
+			$tracker[$profile_id][$entry_id] = array('profile_id' => $profile_id, 'option_id' => $option_id);
 			$this->EE->functions->set_cookie('flag_master', base64_encode(serialize($tracker)), '0'); 
 		}
 		else 
 		{
 			$tracker = unserialize(base64_decode($cookie));
-			$tracker[$entry_id] = array('profile_id' => $profile_id, 'option_id' => $option_id);
+			$tracker[$profile_id][$entry_id] = array('profile_id' => $profile_id, 'option_id' => $option_id);
 			$this->EE->functions->set_cookie('flag_master', base64_encode(serialize($tracker)), '0');
 		}
 	}
@@ -161,12 +167,18 @@ class Flag_master_flags
 		$taken = FALSE;
 		//first check if the flag is in the session
 		$cookie = $this->EE->input->cookie('flag_master');
+		
+		if($entry_id == '')
+		{
+			return; 
+		}
+
 		if($cookie)
 		{
-			$cookie = unserialize(base64_decode($cookie));
-			if(array_key_exists($entry_id, $cookie))
+			$cookie = @unserialize(base64_decode($cookie));
+			if(isset($cookie[$profile_id]))
 			{
-				if(isset($cookie[$entry_id]['profile_id']) && $cookie[$entry_id]['profile_id'] == $profile_id)
+				if(isset($cookie[$profile_id][$entry_id]['profile_id']) && $cookie[$profile_id][$entry_id]['profile_id'] == $profile_id)
 				{
 					$taken = TRUE;
 				}

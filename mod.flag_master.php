@@ -99,6 +99,7 @@ class Flag_master
 		$return = $this->EE->TMPL->fetch_param('return');
 		$profile_id = $this->EE->TMPL->fetch_param('profile_id');
 		$entry_id = $this->EE->TMPL->fetch_param('entry_id');
+		$comment_id = $this->EE->TMPL->fetch_param('comment_id');
 		if(!$profile_id)
 		{
 			return lang('profile_id_required');
@@ -109,6 +110,11 @@ class Flag_master
 		{
 			return $this->EE->TMPL->no_results();
 		}
+		
+		if($profile_data['type'] == 'comment')
+		{
+			$entry_id = $comment_id;
+		}		
 		
 		$return_data['0'] = $profile_data;
 		
@@ -152,7 +158,7 @@ class Flag_master
 		}
 		
 		if ($this->EE->input->post('fm_form') == $form_id)
-		{
+		{	
 			if($this->EE->flag_master_flags->flag_item($profile_id, $entry_id, $_POST))
 			{
 				redirect('/'.$return);
