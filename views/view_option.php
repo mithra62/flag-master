@@ -29,7 +29,7 @@ $this->table->clear();
 ?>
 </div>
 
-
+<!-- 
 <div id="my_accordion">
 	<div class="fm_top_nav">
 		<div class="fm_nav">
@@ -82,3 +82,4 @@ $this->table->clear();
 </div>
 
 </div>
+ -->

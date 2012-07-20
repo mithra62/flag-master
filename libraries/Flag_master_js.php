@@ -97,40 +97,27 @@ class Flag_master_js
 					);		
 	}
 	
-	public function get_dialogs()
+	public function get_user_defined_dialogs($data)
 	{
-		return array(
-				'
-					$( "#product_chart" ).dialog({
+		$return = '';
+		foreach($data AS $item)
+		{
+			$return .= '
+					$( "#user_defined_'.$item['id'].'" ).dialog({
 						autoOpen: false,
 						show: "blind",
-						height:"450",
-						width:"850",
 						modal:true,
 						hide: "explode"
 					});
 			
-					$( "#product_sum_chart_opener" ).click(function() {
-						$( "#product_chart" ).dialog( "open" );
+					$( "#user_defined_'.$item['id'].'_opener" ).click(function() {
+						$( "#user_defined_'.$item['id'].'" ).dialog( "open" );
 						return false;
-					});
-								
-					$( "#monthly_history_report_chart" ).dialog({
-						autoOpen: false,
-						show: "blind",
-						height:"450",
-						width:"850",
-						modal:true,
-						hide: "explode"
-					});
-			
-					$( "#monthly_chart_opener" ).click(function() {
-						$( "#monthly_history_report_chart" ).dialog( "open" );
-						return false;
-					});
-								
-				'
-		);		
+					});					
+			';
+		}
+		
+		return array($return);		
 	}
 	
 	public function get_form_profile()

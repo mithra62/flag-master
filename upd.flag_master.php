@@ -215,7 +215,13 @@ class Flag_master_upd
 						'type' 			=> 'text',
 						'null'			=> FALSE,
 						'default'		=> ''
-				),				
+				),
+				'auto_close_threshold'	=> array(
+						'type' 			=> 'int',
+						'constraint'	=> 10,
+						'null'			=> FALSE,
+						'default'		=> '0'
+				),
 				'last_modified'	=> array(
 						'type' 			=> 'datetime'
 				),

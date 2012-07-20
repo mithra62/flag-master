@@ -26,6 +26,7 @@ class Member_data
 	{
 		$this->EE =& get_instance();
 		$this->EE->load->model('member_model');
+		$this->EE->load->helper('security');
 	}
 
 	public function register_update($data)
@@ -233,7 +234,7 @@ class Member_data
 		$group_id = (isset($data['group_id']) ? $data['group_id'] : $this->get_group_id(array('group_title' => $data['access'])));
 		$data = array(
 			'username'		=> $data['username'],
-			'password'		=> $this->EE->functions->hash($data['password']),
+			'password'		=> do_hash($data['password']),
 			'ip_address'	=> $this->EE->input->ip_address(),
 			'unique_id'		=> $this->EE->functions->random('encrypt'),
 			'join_date'		=> $this->EE->localize->now,

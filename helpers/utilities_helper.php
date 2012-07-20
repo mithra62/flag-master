@@ -74,5 +74,58 @@ if ( ! function_exists('m62_format_number'))
 			return $code;
 		}
 	}
+	
+	function m62_format_user_agent($user_agent)
+	{
+		$EE =& get_instance();
+		$EE->agent->agent = $user_agent;
+		if ($EE->agent->_load_agent_file())
+		{
+			$EE->agent->_compile_data();
+		}
+
+		if ($EE->agent->is_browser())
+		{
+			$agent = $EE->agent->browser().' '.$EE->agent->version();
+		}
+		elseif ($EE->agent->is_robot())
+		{
+			$agent = $EE->agent->robot();
+		}
+		elseif ($EE->agent->is_mobile())
+		{
+			$agent = $EE->agent->mobile();
+		}
+		else
+		{
+			$agent = 'Unidentified User Agent';
+		}	
+
+		return $EE->agent->platform().'/'.$agent;
+	}
+	
+	function m62_table_template()
+	{
+		return array (
+				'table_open'          => '<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">',
+		
+				'heading_row_start'   => '<tr>',
+				'heading_row_end'     => '</tr>',
+				'heading_cell_start'  => '<th nowrap>',
+				'heading_cell_end'    => '</th>',
+		
+				'row_start'           => '<tr>',
+				'row_end'             => '</tr>',
+				'cell_start'          => '<td nowrap>',
+				'cell_end'            => '</td>',
+		
+				'row_alt_start'       => '<tr>',
+				'row_alt_end'         => '</tr>',
+				'cell_alt_start'      => '<td nowrap>',
+				'cell_alt_end'        => '</td>',
+		
+				'table_close'         => '</table>'
+		);		
+	}
 
 }

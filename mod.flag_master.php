@@ -97,6 +97,12 @@ class Flag_master
 	{
 		$form_id = $this->EE->TMPL->fetch_param('form_id', 'flag_master_form');
 		$return = $this->EE->TMPL->fetch_param('return');
+		$return_template = $this->EE->TMPL->fetch_param('return_template', FALSE);
+		if($return_template)
+		{
+			$return = $return_template;
+		}
+		
 		$profile_id = $this->EE->TMPL->fetch_param('profile_id');
 		$entry_id = $this->EE->TMPL->fetch_param('entry_id');
 		$comment_id = $this->EE->TMPL->fetch_param('comment_id');
@@ -105,7 +111,7 @@ class Flag_master
 			return lang('profile_id_required');
 		}
 		
-		$profile_data = $this->EE->flag_master_profiles->get_profile(array('id' => $profile_id));
+		$profile_data = $this->EE->flag_master_profiles->get_profile(array('id' => $profile_id, 'active' => '1'));
 		if(!$profile_data)
 		{
 			return $this->EE->TMPL->no_results();
@@ -121,7 +127,7 @@ class Flag_master
 		$duplicate_check = $this->EE->flag_master_flags->is_duplicate_flag($profile_id, $entry_id);
 		$return_data['0']['is_duplicate'] = ($duplicate_check ? '1' : '0');
 		$return_data['0'] = $this->prep_prefix($return_data['0']);
-		$option_data = $this->EE->flag_master_profile_options->get_profile_options(array('profile_id' => $profile_id));;
+		$option_data = $this->EE->flag_master_profile_options->get_profile_options(array('profile_id' => $profile_id));
 		$i=0;
 		foreach($option_data AS $option)
 		{
@@ -161,6 +167,7 @@ class Flag_master
 		{	
 			if($this->EE->flag_master_flags->flag_item($profile_id, $entry_id, $_POST))
 			{
+				//send email notification
 				redirect('/'.$return);
 			}
 		}
@@ -180,18 +187,6 @@ class Flag_master
 
 		return $output;
 	}	
-	
-	public function tag_test()
-	{
-		$data = array();
-		if(count($data) == '0')
-		{
-			return $this->EE->TMPL->no_results();
-		}
-				
-		$output = $this->prep_output($data);
-		return $output;		
-	}
 	
 	/**
 	 * Wrapper for all the TMPL and pagination stuff

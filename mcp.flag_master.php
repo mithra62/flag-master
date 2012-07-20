@@ -57,6 +57,7 @@ class Flag_master_mcp
 		$this->EE->load->library('javascript');
 		$this->EE->load->library('table');
 		$this->EE->load->helper('form');
+		$this->EE->load->helper('text');
 		$this->EE->load->library('form_validation');
 
 		$this->EE->load->helper('utilities');
@@ -96,11 +97,13 @@ class Flag_master_mcp
 	public function index()
 	{
 		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->jquery->tablesorter('#flagged_comments table', '{headers: {5: {sorter: false}}, widgets: ["zebra"], sortList: [[4,1]]}');
+		$this->EE->jquery->tablesorter('#flagged_entries table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->javascript->compile();		
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('dashboard'));
 		$vars = array();
-		$vars['flagged_comments'] = array();
-		$vars['flagged_entries'] = array();
+		$vars['flagged_comments'] = $this->EE->flag_master_flags->get_flagged_comments();
+		$vars['flagged_entries'] = $this->EE->flag_master_flags->get_flagged_entries();
 		return $this->EE->load->view('index', $vars, TRUE);
 	}
 	
@@ -374,6 +377,51 @@ class Flag_master_mcp
 	{
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_flags'));
 		$entry_id = $this->EE->input->get_post('entry_id', FALSE);
+		if(!$entry_id)
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_options'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+		
+		$entry_data = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));
+		if(!$entry_data || !isset($entry_data['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('entry_not_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+		
+		$where = array('entry_id' => $entry_id, 'fmp.type' => 'entry');
+		$entry_flags = $this->EE->flag_master_flags->get_entry_flags($where);		
+		if(!$entry_flags || !isset($entry_flags['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_flags_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+
+		$flag_meta = $this->EE->flag_master_flags->get_entry_flag_meta($where);
+		$entry_data = $entry_data['0'];
+		$where = array('id' => $entry_flags['0']['profile_id']);
+		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+		$vars = array();
+		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
+		$vars['profile_data'] = $profile_data;
+		$vars['entry_data'] = $entry_data;
+		$vars['flag_meta'] = $flag_meta;
+		$vars['entry_flags'] = $entry_flags;
+		$vars['profile_id'] = $entry_flags['0']['profile_id'];
+		
+		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->javascript->compile();
+		return $this->EE->load->view('view_entry_flags', $vars, TRUE);		
+	}
+	
+	public function view_entry_flag_option()
+	{
+		$this->EE->load->library('user_agent');
+		$entry_id = $this->EE->input->get_post('entry_id', FALSE);
 		$option_id = $this->EE->input->get_post('option_id', FALSE);
 		if(!$entry_id || !$option_id)
 		{
@@ -415,10 +463,112 @@ class Flag_master_mcp
 		$vars['profile_id'] = $option_data['profile_id'];
 		$vars['entry_flags'] = $entry_flags;
 		
+		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_flags').' ('.$option_data['title'].')');
 		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
+		$this->EE->javascript->output($this->EE->flag_master_js->get_user_defined_dialogs($entry_flags));
 		$this->EE->javascript->compile();		
-		return $this->EE->load->view('view_entry_flags', $vars, TRUE);	
+		return $this->EE->load->view('view_entry_flag_option', $vars, TRUE);	
 	}
+	
+	public function view_comment_flags()
+	{
+		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_comment_flags'));
+		$comment_id = $this->EE->input->get_post('comment_id', FALSE);
+		if(!$comment_id)
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_options'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+		if(!$comment_data || !isset($comment_data['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('comment_not_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$where = array('entry_id' => $comment_id, 'fmp.type' => 'comment');
+		$comment_flags = $this->EE->flag_master_flags->get_entry_flags($where);
+		if(!$comment_flags || !isset($comment_flags['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_flags_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$flag_meta = $this->EE->flag_master_flags->get_entry_flag_meta($where);
+		$comment_data = $comment_data['0'];
+		$where = array('id' => $comment_flags['0']['profile_id']);
+		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+		$vars = array();
+		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['profile_data'] = $profile_data;
+		$vars['comment_data'] = $comment_data;
+		$vars['flag_meta'] = $flag_meta;
+		$vars['comment_flags'] = $comment_flags;
+		$vars['profile_id'] = $comment_flags['0']['profile_id'];
+	
+		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->javascript->compile();
+		return $this->EE->load->view('view_comment_flags', $vars, TRUE);
+	}	
+	
+	public function view_comment_flag_option()
+	{
+		$comment_id = $this->EE->input->get_post('comment_id', FALSE);
+		$option_id = $this->EE->input->get_post('option_id', FALSE);
+		if(!$comment_id || !$option_id)
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_options'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$option_data = $this->EE->flag_master_flags->get_entry_flags(array('entry_id' => $comment_id, 'option_id' => $option_id, 'fmp.type' => 'comment'));
+		if(!$option_data || !isset($option_data['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_options'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+		if(!$comment_data || !isset($comment_data['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('comment_not_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$where = array('option_id' => $option_id, 'entry_id' => $comment_id, 'fmp.type' => 'comment');
+		$entry_flags = $this->EE->flag_master_flags->get_all_entry_flags($where, FALSE);
+		$flag_meta = $this->EE->flag_master_flags->get_entry_flag_meta($where);
+	
+		$option_data = $option_data['0'];
+		$comment_data = $comment_data['0'];
+	
+		$where = array('id' => $option_data['profile_id']);
+		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+		$vars = array();
+		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['option_data'] = $option_data;
+		$vars['profile_data'] = $profile_data;
+		$vars['option_id'] = $option_id;
+		$vars['comment_data'] = $comment_data;
+		$vars['profile_id'] = $option_data['profile_id'];
+		$vars['entry_flags'] = $entry_flags;
+		$vars['flag_meta'] = $flag_meta;
+	
+		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_comment_flags').' ('.$option_data['title'].')');
+		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
+		$this->EE->javascript->output($this->EE->flag_master_js->get_user_defined_dialogs($entry_flags));
+		$this->EE->javascript->compile();
+		return $this->EE->load->view('view_comment_flag_option', $vars, TRUE);
+	}	
 	
 	public function delete_flags_confirm()
 	{

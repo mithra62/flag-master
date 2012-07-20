@@ -61,6 +61,7 @@ class Flag_master_profiles_model extends CI_Model
 		   'type' => $profile['type'],
 		   'active' => $profile['active'],
 		   'notify_emails' => $profile['notify_emails'],
+		   'auto_close_threshold' => $profile['auto_close_threshold'],
 		   'last_modified' => date('Y-m-d H:i:s')
 		);
 	}
@@ -87,6 +88,7 @@ class Flag_master_profiles_model extends CI_Model
 	{
 		$data = $this->get_sql($profile);
 		$data['created_date'] = date('Y-m-d H:i:s');
+		$data['created_by'] = $this->session->userdata['member_id'];
 		if($this->db->insert($this->_table, $data))
 		{
 			return $this->db->insert_id();

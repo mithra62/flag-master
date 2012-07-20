@@ -39,7 +39,7 @@ $lang = array(
 'edit_option' => 'Edit Option',	
 'add_child_option' => 'Add Child Option',
 'no_child_options' => 'No Child Options',
-'back_to_option' => 'Back to Option',
+'back_to_option' => 'Back To Option',
 'user_defined' => 'User Defined',
 'delete_options_confirm' => 'Are you sure you want to delete these options?',
 'delete_flags_confirm' => 'Are you sure you want to delete these flags?',
@@ -63,6 +63,18 @@ $lang = array(
 'global_config' => 'Global Configuration',
 'flag_master_date_format' => 'Date Format',
 'flag_master_date_format_instructions' => 'The date format you want Flag Master to use when handling dates. Note that the format should conform to the <a href="http://expressionengine.com/user_guide/templates/date_variable_formatting.html#date-formatting-codes" target="_blank">ExpressionEngine date format</a>.',
-		
+'type' => 'Type',
+'flags_deleted' => 'Flags Deleted',
+'back_to_entry' => 'Back To Entry',
+'name_instructions' => 'What do you want to call this Profile?',
+'status_instructions' => 'If a Profile isn\'t active it won\'t be available through the module tags.',
+'type_instructions' => 'What type of content will this Flag Profile be used for? Accuracy is VERY important here so check your setting.',
+'notify_emails_instructions' => 'Who do you want to notify when Flag Master does something? Enter 1 email address per line.',
+'view_comment_flags' => 'View Comment Flags',
+'back_to_dashboard' => 'Back To Dashboard',
+'back_to_comment' => 'Back To Comment',
+'platform' => 'Platform',
+'auto_close_threshold' => 'Auto Close Threshold',
+'auto_close_threshold_instructions' => 'How many flags are required before an item is automatically closed. Leave blank or enter 0 to disable.',
 ''=>''
 );

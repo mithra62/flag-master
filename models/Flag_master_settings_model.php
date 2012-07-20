@@ -1,24 +1,24 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
  /**
- * mithra62 - EE Add-on Stub
+ * mithra62 - Flag Master
  *
- * @package		mithra62:EE_addon_stub
+ * @package		mithra62:Flag_master
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2012, mithra62, Eric Lamb.
  * @link		http://blah.com
  * @version		1.0
- * @filesource 	./system/expressionengine/third_party/ee_addon_stub/
+ * @filesource 	./system/expressionengine/third_party/flag_master/
  */
  
  /**
- * EE Add-on Stub - Settings Model
+ * Flag Master- Settings Model
  *
  * Control Panel class
  *
- * @package 	mithra62:Ee_addon_stub
+ * @package 	mithra62:Flag_master
  * @author		Eric Lamb
- * @filesource 	./system/expressionengine/third_party/ee_addon_stub/models/Flag_master_settings_model.php
+ * @filesource 	./system/expressionengine/third_party/flag_master/models/flag_master_settings_model.php
  */
 class Flag_master_settings_model extends CI_Model
 {

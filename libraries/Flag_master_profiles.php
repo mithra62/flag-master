@@ -61,7 +61,6 @@ class Flag_master_profiles
 	 */
 	public function add_profile(array $data)
 	{
-		$data['created_by'] = $this->EE->session->userdata['member_id'];
 		$data['total_flags'] = '0';
 		return $this->EE->flag_master_profiles_model->add_profile($data);
 	}	

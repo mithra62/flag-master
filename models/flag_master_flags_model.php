@@ -67,8 +67,10 @@ class Flag_master_flags_model extends CI_Model
 	 */
 	public function add_flag(array $flag)
 	{
+		$this->load->library('user_agent');
 		$data = $this->get_sql($flag);
 		$data['created_date'] = date('Y-m-d H:i:s');	
+		$data['user_agent'] = $this->agent->agent;
 		return $this->db->insert($this->_table, $data); 
 	}	
 	

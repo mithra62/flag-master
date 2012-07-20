@@ -15,7 +15,7 @@ if(count($flagged_entries) > 0):
 	{
 	
 		$this->table->add_row(
-								'<a href="'.$url_base.'view_entry_flags'.AMP.'option_id='.$option['option_id'].AMP.'entry_id='.$option['entry_id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
+								'<a href="'.$url_base.'view_entry_flag_option'.AMP.'option_id='.$option['option_id'].AMP.'entry_id='.$option['entry_id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
 								$option['total_flags'],
 								m62_convert_timestamp($option['first_flag']),
 								m62_convert_timestamp($option['last_flag'])
