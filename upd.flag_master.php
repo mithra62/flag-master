@@ -110,10 +110,10 @@ class Flag_master_upd
 		$this->EE->db->where('class', $this->class);
 		$this->EE->db->delete('actions');
 		
-		//$this->EE->dbforge->drop_table($this->settings_table);
-		//$this->EE->dbforge->drop_table($this->profiles_table);
-		//$this->EE->dbforge->drop_table($this->profile_options_table);
-		//$this->EE->dbforge->drop_table($this->flags_table);
+		$this->EE->dbforge->drop_table($this->settings_table);
+		$this->EE->dbforge->drop_table($this->profiles_table);
+		$this->EE->dbforge->drop_table($this->profile_options_table);
+		$this->EE->dbforge->drop_table($this->flags_table);
 		
 		$this->disable_extension();
 	

@@ -61,10 +61,10 @@ class Flag_master_mcp
 		$this->EE->load->library('form_validation');
 
 		$this->EE->load->helper('utilities');
+		$this->EE->load->library('channel_data');
 		$this->EE->load->library('flag_master_lib');
 		$this->EE->load->library('flag_master_profiles');
 		$this->EE->load->library('flag_master_js');
-		$this->EE->load->library('channel_data');
 
 		$this->settings = $this->EE->flag_master_lib->get_settings();		
 

@@ -26,6 +26,7 @@ class Flag_master_flags
 	{
 		$this->EE =& get_instance();
 		$this->EE->load->model('Flag_master_flags_model', 'flag_master_flags_model');
+		$this->EE->load->library('channel_data');
 		$this->settings = $this->EE->flag_master_lib->get_settings();
 	}
 	
@@ -170,6 +171,24 @@ class Flag_master_flags
 		$data = $this->EE->db->get();
 		return $data->result_array();
 	}
+	
+	public function get_total_flags($entry_id, $type = 'entry')
+	{
+		$return = '0';
+		$this->EE->db->select("COUNT(fmf.id) AS total_entry_flags");
+		$this->EE->db->from('flag_master_flags fmf');
+		$this->EE->db->join('flag_master_profiles fmp', 'fmf.profile_id = fmp.id');	
+		$this->EE->db->where('fmp.type', $type);
+		$this->EE->db->where('fmf.entry_id', $entry_id);
+		$data = $this->EE->db->get();
+		if($data->num_rows >= '1')
+		{
+			$data = $data->row();
+			$return = $data->total_entry_flags;
+		}
+		return $return;
+		
+	}
 
 	/**
 	 * Processes the flagging of an "item"
@@ -196,6 +215,28 @@ class Flag_master_flags
 			return lang('no_profile');
 		}
 		
+		if($profile_data['auto_close_threshold'] >= '1')
+		{
+			//proc auto close threshold
+			$total_flags = $this->get_total_flags($entry_id, $profile_data['type']);
+			if(($total_flags+1) >= $profile_data['auto_close_threshold'])
+			{
+				switch($profile_data['type'])
+				{
+					case 'entry':
+						$this->EE->channel_data->update_entry_status($entry_id, 'closed');
+					break;
+					
+					default:
+					case 'comment':
+						$this->EE->channel_data->update_comment_status($entry_id, 'closed');
+					break;
+				}
+			}
+			//echo 'fdsa';
+			///exit;
+		}
+
 		$option_data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $data['option_id']));
 		$data['option_id'] = $data['option_id'];
 		$data['entry_id'] = $entry_id;

@@ -722,6 +722,16 @@ class Channel_data
 
 		return $entry_id;
 	}
+	
+	public function update_entry_status($entry_id, $status = 'closed')
+	{
+		$data = array(
+				'status' => $status
+		);
+		
+		$this->EE->db->where('entry_id', $entry_id);
+		$this->EE->db->update('channel_titles', $data);		
+	}
 
 	/**
 	 * Setup Relationships
