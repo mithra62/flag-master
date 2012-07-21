@@ -91,9 +91,9 @@ class Flag_master_settings_model extends CI_Model
 		foreach ($this->_defaults as $key => $value)
 		{
 			//setup the override check
-			if(isset($this->config->config['ct_admin'][$key]))
+			if(isset($this->config->config['flag_master'][$key]))
 			{
-				$settings[$key] = $this->config->config['ct_admin'][$key];
+				$settings[$key] = $this->config->config['flag_master'][$key];
 			}
 			
 			//normal default check				

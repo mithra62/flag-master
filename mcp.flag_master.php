@@ -414,6 +414,7 @@ class Flag_master_mcp
 		$vars['profile_id'] = $entry_flags['0']['profile_id'];
 		
 		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->javascript->compile();
 		return $this->EE->load->view('view_entry_flags', $vars, TRUE);		
 	}
@@ -467,7 +468,8 @@ class Flag_master_mcp
 		$this->EE->cp->add_js_script('ui', 'accordion');
 		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
 		$this->EE->javascript->output($this->EE->flag_master_js->get_user_defined_dialogs($entry_flags));
-		$this->EE->javascript->compile();		
+		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
+		$this->EE->javascript->compile();
 		return $this->EE->load->view('view_entry_flag_option', $vars, TRUE);	
 	}
 	
@@ -505,6 +507,7 @@ class Flag_master_mcp
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
 		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['comment_view_url'] = '?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
 		$vars['profile_data'] = $profile_data;
 		$vars['comment_data'] = $comment_data;
 		$vars['flag_meta'] = $flag_meta;
@@ -512,6 +515,7 @@ class Flag_master_mcp
 		$vars['profile_id'] = $comment_flags['0']['profile_id'];
 	
 		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->javascript->compile();
 		return $this->EE->load->view('view_comment_flags', $vars, TRUE);
 	}	
@@ -554,6 +558,7 @@ class Flag_master_mcp
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
 		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['comment_view_url'] = '?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
 		$vars['option_data'] = $option_data;
 		$vars['profile_data'] = $profile_data;
 		$vars['option_id'] = $option_id;
@@ -563,6 +568,7 @@ class Flag_master_mcp
 		$vars['flag_meta'] = $flag_meta;
 	
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_comment_flags').' ('.$option_data['title'].')');
+		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->cp->add_js_script('ui', 'accordion');
 		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
 		$this->EE->javascript->output($this->EE->flag_master_js->get_user_defined_dialogs($entry_flags));

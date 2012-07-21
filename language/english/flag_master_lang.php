@@ -74,6 +74,7 @@ $lang = array(
 'back_to_dashboard' => 'Back To Dashboard',
 'back_to_comment' => 'Back To Comment',
 'platform' => 'Platform',
+'comment_not_found' => 'Comment Not Found',
 'auto_close_threshold' => 'Auto Close Threshold',
 'auto_close_threshold_instructions' => 'How many flags are required before an item is automatically closed. Leave blank or enter 0 to disable.',
 ''=>''
