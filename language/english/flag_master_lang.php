@@ -77,5 +77,15 @@ $lang = array(
 'comment_not_found' => 'Comment Not Found',
 'auto_close_threshold' => 'Auto Close Threshold',
 'auto_close_threshold_instructions' => 'How many flags are required before an item is automatically closed. Leave blank or enter 0 to disable.',
+'entry_status_change_notification_subject' => 'Entry Status Change',
+'comment_status_change_notification_subject' => 'Comment Status Change',	
+'comment_status_change_notification_message' => '
+Hello,
+
+A comment on your site had it\'s status set to closed due to Flag Master. You can view your closed comment below:
+{view_url}
+		
+Flag Master :)
+		',
 ''=>''
 );

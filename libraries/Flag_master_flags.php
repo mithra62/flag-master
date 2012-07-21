@@ -215,6 +215,8 @@ class Flag_master_flags
 			return lang('no_profile');
 		}
 		
+		$this->send_status_notification($profile_data, $entry_id);
+		exit;
 		if($profile_data['auto_close_threshold'] >= '1')
 		{
 			//proc auto close threshold
@@ -233,8 +235,6 @@ class Flag_master_flags
 					break;
 				}
 			}
-			//echo 'fdsa';
-			///exit;
 		}
 
 		$option_data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $data['option_id']));
@@ -257,6 +257,39 @@ class Flag_master_flags
 			
 			return TRUE;
 		}
+	}
+	
+	public function send_status_notification(array $profile_data, $entry_id)
+	{
+		$to = array();
+		$emails = explode("\n", $profile_data['notify_emails']);
+		foreach($emails AS $email)
+		{
+			if($this->EE->flag_master_lib->check_email($email))
+			{
+				$to[] = $email;
+			}
+		}
+		
+		if(count($to) == '0')
+		{
+			return FALSE;
+		}
+		
+		$this->EE->email->from($this->EE->config->config['webmaster_email'], $this->EE->config->config['site_name']);
+		$this->EE->email->to($to);
+		$this->EE->email->subject($this->EE->config->config['site_name'].' '.lang($profile_data['type'].'_status_change_notification_subject'));
+		
+		$url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;
+		if($profile_data['type'] == 'comment')
+		{
+			$url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+		}
+		
+		$message = lang($profile_data['type'].'_status_change_notification_message');
+		$message = str_replace('{view_url}', $url, $message);
+		$this->EE->email->message($message);
+		$this->EE->email->send();
 	}
 	
 	/**

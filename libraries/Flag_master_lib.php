@@ -100,6 +100,18 @@ class Flag_master_lib
 			$errors['license_number'] = 'missing_license_number';
 		}
 		return $errors;
+	}
+
+	public function check_email($email)
+	{
+		if(function_exists('filter_var'))
+		{
+			return filter_var($email, FILTER_VALIDATE_EMAIL);
+		}
+		else
+		{
+			return $this->valid_email($email);
+		}
 	}	
 	
 	/**
