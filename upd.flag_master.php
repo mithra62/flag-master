@@ -371,7 +371,13 @@ class Flag_master_upd
 						'constraint'	=> '30',
 						'null'			=> FALSE,
 						'default'		=> ''
-				),								
+				),	
+				'user_agent'	=> array(
+						'type' 			=> 'varchar',
+						'constraint'	=> '100',
+						'null'			=> FALSE,
+						'default'		=> ''
+				),
 				'last_modified'	=> array(
 						'type' 			=> 'datetime'
 				),
