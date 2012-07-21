@@ -215,8 +215,6 @@ class Flag_master_flags
 			return lang('no_profile');
 		}
 		
-		$this->send_status_notification($profile_data, $entry_id);
-		exit;
 		if($profile_data['auto_close_threshold'] >= '1')
 		{
 			//proc auto close threshold
@@ -234,6 +232,7 @@ class Flag_master_flags
 						$this->EE->channel_data->update_comment_status($entry_id, 'closed');
 					break;
 				}
+				$this->send_status_notification($profile_data, $entry_id);
 			}
 		}
 
