@@ -1,0 +1,218 @@
+<!doctype html>  
+<!--[if IE 6 ]><html lang="en-us" class="ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en-us" class="ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en-us" class="ie8"> <![endif]-->
+<!--[if (gt IE 7)|!(IE)]><!-->
+<html lang="en-us"><!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	
+	<title>Flag Master 1.0 - ExpressionEngine Entry / Comment Flagging System</title>
+	
+	<meta name="description" content="">
+	<meta name="author" content="Mithra62">
+	<meta name="copyright" content="Mithra62">
+	<meta name="generator" content="Documenter v1.6 http://rxa.li/documenter">
+	<meta name="date" content="2012-07-22T00:00:00+02:00">
+	
+	<link rel="stylesheet" href="css/documenter_style.css" media="all">
+	
+	
+	<script src="js/jquery.1.6.4.js"></script>
+	
+	<script src="js/jquery.scrollTo-1.4.2-min.js"></script>
+	<script src="js/jquery.easing.js"></script>
+	
+	
+	<script>document.createElement('section');var duration=500,easing='easeOutSine';</script>
+	<script src="js/script.js"></script>
+	
+	<style>
+		html{background-color:#FFFFFF;color:#383838;}
+		::-moz-selection{background:#444444;color:#DDDDDD;}
+		::selection{background:#444444;color:#DDDDDD;}
+		#documenter_sidebar #documenter_logo{background-image:url(assets/images/image_1.png);}
+		a{color:#0000FF;}
+		hr{border-top:1px solid #EBEBEB;border-bottom:1px solid #FFFFFF;}
+		#documenter_sidebar, #documenter_sidebar ol a{background-color:#DDDDDD;color:#222222;}
+		#documenter_sidebar ol a{-webkit-text-shadow:1px 1px 0px #EEEEEE;-moz-text-shadow:1px 1px 0px #EEEEEE;text-shadow:1px 1px 0px #EEEEEE;}
+		#documenter_sidebar ol{border-top:1px solid #AAAAAA;}
+		#documenter_sidebar ol a{border-top:1px solid #EEEEEE;border-bottom:1px solid #AAAAAA;color:#444444;}
+		#documenter_sidebar ol a:hover{background:#444444;color:#DDDDDD;border-top:1px solid #444444;}
+		#documenter_sidebar ol a.current{background:#444444;color:#DDDDDD;border-top:1px solid #444444;}
+		#documenter_copyright{display:block !important;visibility:visible !important;}
+	</style>
+	
+</head>
+<body>
+	<div id="documenter_sidebar">
+		<a href="#documenter_cover" id="documenter_logo"></a>
+		<ol id="documenter_nav">
+			<li><a class="current" href="#documenter_cover">Start</a></li>
+			<li><a href="#about_flag_master">About Flag Master</a></li>
+			<li><a href="#installation">Installation</a></li>
+			<li><a href="#fieldtype">FieldType</a></li>
+			<li><a href="#profiles">Profiles</a>
+				<ol>
+					<li><a href="#profiles_add_profile">Add Profile</a>
+					<li><a href="#profiles_flag_options">Flag Options</a>
+				</ol>
+			</li>
+			<li><a href="#dashboard">Dashboard</a>
+				<ol>
+					<li><a href="#dashboard_view_flags">View Flags</a>
+					<li><a href="#dashboard_view_flag_option">View Flag Option</a>
+				</ol>
+			</li>
+			<li><a href="#developers">Developers</a>
+				<ol>
+					<li><a href="#developers_flag_mastersimple_form">flag_master:simple_form</a>
+					<li><a href="#developers_examples">Examples</a>
+				</ol>
+			</li>
+			<li><a href="#configuration">Configuration</a>
+				<ol>
+					<li><a href="#configuration_label_for"flag_master_date_format"date_format_label">Date Format</a>
+					<li><a href="#configuration_license_number">License Number</a>
+				</ol>
+			</li>
+
+		</ol>
+		<div id="documenter_copyright">Copyright Mithra62 2012<br>
+		made with the <a href="http://rxa.li/documenter">Documenter v1.6</a> 
+		</div>
+	</div>
+	<div id="documenter_content">
+	<section id="documenter_cover"><h1>Flag Master 1.0</h1><h2>ExpressionEngine Entry / Comment Flagging System</h2><hr><ul><li>Created: 07/21/2012</li><li>latest Update: 07/22/2012</li><li>By: Mithra62</li><li><a href=""></a></li><li>Email: <a href="mailto:&#101;&#114;&#105;&#99;&#64;&#109;&#105;&#116;&#104;&#114;&#97;&#54;&#50;&#46;&#99;&#111;&#109;">&#101;&#114;&#105;&#99;&#64;&#109;&#105;&#116;&#104;&#114;&#97;&#54;&#50;&#46;&#99;&#111;&#109;</a></li></ul></section><section id="about_flag_master">
+	<h3>About Flag Master</h3><hr class="notop">
+<p>
+	Flag Master makes it easy to hand content moderation of an ExpressionEngine site off to the users. With Flag Master you can create unlimited Profiles with custom options to allow site users the ability to mark, or &quot;Flag&quot;, certain content based on your specific needs and custom criteria.</p>
+<p>
+	Flag Master works with both Channel Entries and Comments and can be set to auto close items based on flag count.</p>
+</section>
+<section id="installation">
+	<h3>Installation</h3><hr class="notop">
+<p>
+	To install Flag Master you follow the same steps as any other <a href="http://expressionengine.com/user_guide/cp/add-ons/index.html">ExpressionEngine add-on</a>:</p>
+<ol>
+	<li>
+		Unzip the download</li>
+	<li>
+		Upload the extracted folder to your ExpressionEngine third party folder usually located at:<br>
+		<span style="color: rgb(204, 51, 51);">/system/expressionengine/third_party/</span></li>
+	<li>
+		Navigate to your Add-Ons management page and choose Modules</li>
+	<li>
+		Select Flag Master from the list and click install. Choose to install all items.</li>
+</ol>
+<p>
+	Once the module package is installed you have to create your first Profile and create/assign Options to it.</p>
+<p>
+	Optionally, you can create a custom field within your channels using the Flag Master custom FieldType. This FieldType will display details about an entries current Flags and allow quick access to the module.</p>
+</section>
+<section id="fieldtype">
+	<h3>FieldType</h3><hr class="notop">
+<p>
+	Flag Master comes with a FieldType you can attach to your channel entries to view the Flags against your content. The FieldType lists the Flag Options selected and links to display details on those flags. It&#39;s recommended that the field is placed in it&#39;s own tab from the Publish Layout customization.</p>
+</section>
+<section id="profiles">
+	<h3>Profiles</h3><hr class="notop">
+<p>
+	Flag Master allows you to setup multiple, different, flag options for your content. You do this through Profiles. For example, you can setup a Profile for your Blog Comments and another for Blog Articles, each having it&#39;s own custom options to flag an item.</p>
+<h4 id="profiles_add_profile">Add Profile</h4>
+<p>
+	Simply click Add Profile and fill out the form. Note that the Type option is <em>very</em> important for Flag Master to relate data properly so check your work.</p>
+<h4 id="profiles_flag_options">Flag Options</h4>
+<p>
+	Once a Profile has been created you can add Flag Options. Here is where you setup the various options selectable for flagging content. You can setup options to be user defined (textarea option) as well as if a user has to be logged in to choose an option.</p>
+<p>
+	You can sort the Flag Options by drag and dropping the rows on the Profile View page.</p>
+</section>
+<section id="dashboard">
+	<h3>Dashboard</h3><hr class="notop">
+<p>
+	The Dashboard is where you can view all the stats for your Flagged items. The Dashboard is broken up by either Entry or Comments.</p>
+<h4 id="dashboard_view_flags">View Flags</h4>
+<p>
+	Clicking on a either a comment or entry from the Dashboard will take you to an overview of the flags for that item. This page displays the quick access to the item, dates for first and last flag, and a grouping of all flag options.</p>
+<h4 id="dashboard_view_flag_option">View Flag Option</h4>
+<p>
+	To allow for detailed analysis of an individual comment or entrie&#39;s flags Flag Master stores a lot of details about each flag event.</p>
+</section>
+<section id="developers">
+	<h3>Developers</h3><hr class="notop">
+<p>
+	Flag Master uses a prefix mechanism for all template tags. By default, the prefix is &quot;fm&quot; but you can change it by adding the variable &quot;prefix=&quot; to all tag pairs.</p>
+<h4 id="developers_flag_mastersimple_form">flag_master:simple_form</h4>
+<p>
+	<code>{exp:flag_master:simple_form}</code></p>
+<p>
+	This is the main template tag pair to use. It creates a form to create the Flag interface. It accepts the below parameters:</p>
+<p>
+	<strong>Parameters</strong></p>
+<p>
+	<strong>profile_id</strong> (required)<br>
+	The ID number for the profile you&#39;re using for this content. You can get this by viewing the Profile list page.</p>
+<p>
+	<strong>entry_id/comment_id </strong>(required)<br>
+	Either an entry_id or a comment_id must be passed to this tag. Be sure to double check that your profile is setup for the content type you&#39;re using here.</p>
+<p>
+	<strong>return </strong>(optional)<br>
+	The template path/group you want the user to return to after flagging an item. Note that it should NOT have a slash at the front. (eg: blog/my-blog-url-title/comments). If left blank the user is redirected to the home page.</p>
+<p>
+	<strong>prefix</strong> (optional)<br>
+	The value to use for template tags within the tag pair. By default all variables are prefixed with &quot;fm&quot; but you can change that here.</p>
+<p>
+	<strong>Variables</strong></p>
+<p>
+	Note! All examples below use &quot;fm&quot; as the variable prefix.</p>
+<p>
+	<strong>fm:type</strong><br>
+	The profile type</p>
+<p>
+	<strong>fm:auto_close_threshold</strong><br>
+	The amount of flags required to close an entry/comment.</p>
+<p>
+	<strong>fm:profile_name</strong><br>
+	The name of the profile being used.</p>
+<p>
+	<strong>fm:is_duplicate</strong><br>
+	Returns &quot;1&quot; if a user has already flagged an item under that profile. Useful for conditionals.</p>
+<p>
+	<strong>fm:options</strong><br>
+	Tag Pair to output the flag form fields.</p>
+<p>
+	<strong>fm:js_id</strong><br>
+	Used in between &quot;fm:options&quot; this will return the ID created for the form field option. Useful for creating JavaScript and field labels.</p>
+<p>
+	<strong>fm:radio_button</strong><br>
+	Used in between &quot;fm:options&quot; this will return the radio button to output for the option. Note that this is a plain radio button with no title.</p>
+<p>
+	<strong>fm:option_title</strong><br>
+	Used in between &quot;fm:options&quot; this will return the option&#39;s title.</p>
+<p>
+	<strong>fm:description</strong><br>
+	Used in between &quot;fm:options&quot; this will return the option&#39;s description.</p>
+<p>
+	<strong>fm:user_defined</strong><br>
+	Returns &quot;1&quot; if an options is set to be user defined. Useful for checking if a textarea is supposed to be output.</p>
+<p>
+	<strong>fm:textarea</strong><br>
+	Used in between &quot;fm:options&quot; this will return a textarea <em>only</em> if the option is set as User Defined.</p>
+<h4 id="developers_examples">Examples</h4>
+<p>
+	See the example directory for an example of this tag.</p>
+</section>
+<section id="configuration">
+	<h3>Configuration</h3><hr class="notop">
+<h4 id="configuration_label_for"flag_master_date_format"date_format_label"><label for="flag_master_date_format">Date Format</label></h4>
+<p>
+	The date format you want Flag Master to use when handling dates. Note that the format should conform to the <a href="http://expressionengine.com/user_guide/templates/date_variable_formatting.html#date-formatting-codes" target="_blank">ExpressionEngine date format</a>.</p>
+<h4 id="configuration_license_number">License Number</h4>
+<p>
+	You can get your license number from your Devot:ee member page under Past Purchases. Use that code here.</p>
+</section>
+
+	</div>
+</body>
+</html>

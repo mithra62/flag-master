@@ -1,0 +1,22 @@
+{exp:flag_master:simple_form profile_id="2" prefix="fm" comment_id="{segment_3}" return="docs/detail/{segment_4}/flagged"}
+	{if no_results}
+		Can't find profile.
+	{/if}
+	
+	I am flagging this comment as:
+	<br />
+	
+	{if fm:is_duplicate == '1'}
+		<br />You have already flagged this entry. <br /><br />
+	{if:else}
+		{fm:options}
+			<div class=""><label for="{fm:js_id}">{fm:radio_button} {fm:option_title}</label>
+			{if fm:user_defined == '1'}
+				<br />{fm:textarea}
+			{/if}
+			</div>
+		{/fm:options}
+		<input type="submit" name="submit" value="Report" />
+	{/if}
+	
+{/exp:flag_master:simple_form}
