@@ -19,6 +19,7 @@ echo lang('profiles_instructions'); ?>
 if(count($profiles) > 0): 
 	$this->table->set_template($cp_pad_table_template);
 	$this->table->set_heading(
+		lang('id'),
 		lang('name'),
 		lang('status'),
 		lang('type'),
@@ -36,6 +37,7 @@ if(count($profiles) > 0):
 				  );
 	
 		$this->table->add_row(
+								'<a href="'.$url_base.'view_profile'.AMP.'profile_id='.$profile['id'].'" rel="'.$profile['name'].'" id="profile_title_'.$profile['id'].'">'.$profile['id'].'</a>',
 								'<a href="'.$url_base.'view_profile'.AMP.'profile_id='.$profile['id'].'" rel="'.$profile['name'].'" id="profile_title_'.$profile['id'].'">'.$profile['name'].'</a>',
 								($profile['active'] == '1' ? lang('active') : lang('inactive')),
 								lang($profile['type']),

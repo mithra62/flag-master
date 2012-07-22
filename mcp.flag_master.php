@@ -109,7 +109,7 @@ class Flag_master_mcp
 	
 	public function profiles()
 	{
-		$this->EE->jquery->tablesorter('#profiles table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[0,1]]}');
+		$this->EE->jquery->tablesorter('#profiles table', '{headers: {5: {sorter: false}}, widgets: ["zebra"], sortList: [[4,1]]}');
 		$this->EE->javascript->compile();
 				
 		$vars = array();
