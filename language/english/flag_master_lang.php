@@ -21,6 +21,7 @@ $lang = array(
 'profile_not_updated' => 'Profile Couldn\'t Be Updated',
 'delete_profiles_confirm' => 'Are you sure you want to delete these profiles?',
 'profiles_deleted' => 'Profiles Deleted',
+'profile_options_deleted' => 'Profile Option(s) Deleted',
 'profiles_delete_failure' => 'Profiles Couldn\'t Be Deleted',
 'profile_id_required' => 'profile_id is required!',
 'invalid_profile_id' => 'Invalid profile_id',

@@ -637,7 +637,7 @@ class Flag_master_mcp
 		$ids = array();
 		foreach($option_ids AS $id)
 		{
-			$data = $this->EE->flag_master_profiles->get_profile_option(array('id' => $id));
+			$data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $id));
 			if(is_array($data) && count($data) != '0')
 			{
 				$option_data[] = $data;
@@ -657,15 +657,25 @@ class Flag_master_mcp
 	
 	public function delete_options()
 	{
-		$profile_ids = $this->EE->input->get_post('delete', FALSE);
-		if($this->EE->flag_master_profiles->delete_options($profile_ids))
+		$option_ids = $this->EE->input->get_post('delete', FALSE);
+		foreach($option_ids AS $id)
 		{
-			$this->EE->session->set_flashdata('message_success', $this->EE->lang->line('profiles_deleted'));
-			$this->EE->functions->redirect($this->url_base.'profiles');
+			$data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $id));
+			if(is_array($data) && count($data) != '0')
+			{
+				$option_data = $data;
+				break;
+			}
+		}		
+		
+		if($this->EE->flag_master_profile_options->delete_options($option_ids))
+		{
+			$this->EE->session->set_flashdata('message_success', $this->EE->lang->line('profile_options_deleted'));
+			$this->EE->functions->redirect($this->url_base.'view_profile&profile_id='.$option_data['profile_id']);
 			exit;
 		}
 		$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('profiles_delete_failure'));
-		$this->EE->functions->redirect($this->url_base.'profiles');
+		$this->EE->functions->redirect($this->url_base.'view_profile&profile_id='.$option_data['profile_id']);
 		exit;
 	
 	}	
