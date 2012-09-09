@@ -167,8 +167,15 @@ class Flag_master
 		{	
 			if($this->EE->flag_master_flags->flag_item($profile_id, $entry_id, $_POST))
 			{
-				//send email notification
-				redirect('/'.$return);
+				if(AJAX_REQUEST)
+				{
+					$this->EE->output->send_ajax_response(array('success'), FALSE);
+				}
+				else
+				{
+					redirect('/'.$return);
+					exit;
+				}				
 			}
 		}
 		
