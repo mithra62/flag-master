@@ -93,6 +93,29 @@ class Flag_master
 		
 	}
 	
+	public function check_taken_status()
+	{
+		$profile_id = $this->EE->TMPL->fetch_param('profile_id');
+		$entry_id = $this->EE->TMPL->fetch_param('entry_id');
+		$comment_id = $this->EE->TMPL->fetch_param('comment_id');
+		
+		if(!$profile_id)
+		{
+			return lang('profile_id_required');
+		}
+		
+		if($comment_id)
+		{
+			$entry_id = $comment_id;
+		}
+
+		$duplicate_check = $this->EE->flag_master_flags->is_duplicate_flag($profile_id, $entry_id);	
+		if($duplicate_check)
+		{
+			return '1';
+		}
+	}
+	
 	public function simple_form()
 	{
 		$form_id = $this->EE->TMPL->fetch_param('form_id', 'flag_master_form');
@@ -149,6 +172,7 @@ class Flag_master
 			
 			$temp['radio_button'] = form_radio('option_id', $option['id'], FALSE, $extra);
 			$temp['checkbox'] = "<input type='checkbox' name='option_id' value='".$option['id']."' id='".$temp['js_id']."' />";
+			$temp['hidden'] = form_hidden('option_id', $option['id']);
 			
 			if($option['user_defined'] == '1')
 			{
