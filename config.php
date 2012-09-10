@@ -6,7 +6,7 @@
  * @package		mithra62:Flag_master
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2012, mithra62, Eric Lamb.
- * @link		http://blah.com
+ * @link		http://mithra62.com
  * @version		1.0
  * @filesource 	./system/expressionengine/third_party/flag_master/
  */
@@ -21,6 +21,6 @@ $config['description'] = 'Allows visitors to flag entries and inform administrat
 $config['mod_url_name'] = strtolower($config['class_name']);
 $config['ext_class_name'] = $config['class_name'].'_ext';
 
-$config['version'] = '1.0.1';
+$config['version'] = '1.0.2';
 $config['nsm_addon_updater']['versions_xml'] = 'http://mithra62.com/flag-master.xml';
 $config['docs_url'] = 'http://mithra62.com/docs/blah';
