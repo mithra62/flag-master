@@ -23,4 +23,4 @@ $config['ext_class_name'] = $config['class_name'].'_ext';
 
 $config['version'] = '1.0.2';
 $config['nsm_addon_updater']['versions_xml'] = 'http://mithra62.com/flag-master.xml';
-$config['docs_url'] = 'http://mithra62.com/docs/blah';
+$config['docs_url'] = 'http://mithra62.com/docs/flag-master';
