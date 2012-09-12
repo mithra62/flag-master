@@ -1,29 +1,13 @@
-<div id="flag_master_ft">
+<div id="flag_master_ft_<?php echo $field_settings['flag_type']; ?>">
 <?php 
-if(count($flagged_entries) > 0): 
-
-	$this->table->clear();
-	$this->table->set_template($cp_pad_table_template);
-	$this->table->set_heading(
-		lang('name'),
-		lang('total_flags'),
-		lang('first_flag'),
-		lang('last_flag')
-	);
-	
-	foreach($flagged_entries as $option)
-	{
-	
-		$this->table->add_row(
-								'<a href="'.$url_base.'view_entry_flag_option'.AMP.'option_id='.$option['option_id'].AMP.'entry_id='.$option['entry_id'].'">'.$option['title'].'</a>'. '<div class="subtext">'.$option['description'].'</div>',
-								$option['total_flags'],
-								m62_convert_timestamp($option['first_flag']),
-								m62_convert_timestamp($option['last_flag'])
-								);
-	}
-	
-	echo $this->table->generate();	
-else: 
-	echo lang('no_flagged_entries'); 
-endif; ?>	
+if($field_settings['flag_type'] == 'comment')
+{
+	$this->load->view('partials/flagged_comments_list', array('flagged_comments' => $flagged_entries));
+}
+else
+{
+	$this->load->view('partials/flagged_entries_list');
+}
+?>	
 </div>
+

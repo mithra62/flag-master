@@ -118,7 +118,7 @@ class Flag_master_flags
 		return $flag_data;
 	}	
 	
-	public function get_flagged_comments($limit = '10')
+	public function get_flagged_comments($where = array(), $limit = '100')
 	{
 		$this->EE->db->select("c.*, ct.title AS entry_title,  fmp.name AS profile_name, COUNT(fmf.id) AS total_flags, MIN(fmf.created_date) AS first_flag, MAX(fmf.created_date) AS last_flag");
 		
@@ -128,13 +128,15 @@ class Flag_master_flags
 		$this->EE->db->join('channel_titles ct', 'ct.entry_id = c.entry_id');
 		
 		$this->EE->db->where('fmp.type', 'comment');
+		
+		$this->EE->db->where($where);
 		$this->EE->db->group_by('c.comment_id');
 		$this->EE->db->limit($limit);
 		$data = $this->EE->db->get();
 		return $data->result_array();	
 	}
 	
-	public function get_flagged_entries($limit = '10')
+	public function get_flagged_entries($limit = '100')
 	{
 		$this->EE->db->select("ct.title, ct.entry_id, fmp.name AS profile_name, COUNT(fmf.id) AS total_flags, MIN(fmf.created_date) AS first_flag, MAX(fmf.created_date) AS last_flag");
 		

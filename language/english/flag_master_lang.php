@@ -88,5 +88,9 @@ A comment on your site had it\'s status set to closed due to Flag Master. You ca
 		
 Flag Master :)
 		',
+		
+
+'flag_type' => 'Flag Type',
+'flag_type_instructions' => 'What type of Flags do you want displayed?',
 ''=>''
 );
