@@ -93,5 +93,7 @@ Flag Master :)
 'flag_type' => 'Flag Type',
 'flag_type_instructions' => 'What type of Flags do you want displayed?',
 'view_entry_comment_flags' => 'Entry Flagged Comments',
+'settings' => 'Settings',
+'no_flags_found' => 'No Flags Found',
 ''=>''
 );
