@@ -105,6 +105,25 @@ class Channel_data
 			return $entry->entry_id;
 		}		
 	}
+
+	public function get_custom_field_data($field, array $where, $limit = '1')
+	{
+		$this->EE->db->select("cd.".$field);
+		$this->EE->db->from('channel_data cd');
+		$this->EE->db->where($where);
+		$this->EE->db->limit($limit);
+		if($limit == '1')
+		{
+			$data = $this->EE->db->get()->row_array();
+			$data = $data[$field];
+		}
+		else
+		{
+			$data = $this->EE->db->get()->result_array();
+		}
+		
+		return $data;
+	}	
 	
 	public function _translate_custom_fields(array $data, $channel_id)
 	{

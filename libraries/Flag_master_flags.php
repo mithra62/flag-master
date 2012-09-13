@@ -250,6 +250,7 @@ class Flag_master_flags
 			$data['user_defined'] = (isset($data[$key]) ? $data[$key] : $data['user_defined']);
 		}
 
+		$this->update_ft_values($entry_id, $profile_data['type']);
 		if($this->EE->flag_master_flags_model->add_flag($data))
 		{
 			$this->EE->flag_master_profiles->update_profile_flag_count($profile_id, 1);
@@ -258,6 +259,70 @@ class Flag_master_flags
 			
 			return TRUE;
 		}
+	}
+	
+	public function update_ft_values($entry_id, $type)
+	{
+		if($type == 'comment')
+		{
+			$comment_id = $entry_id;
+			$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+			if(isset($comment_data['0']['entry_id']))
+			{
+				$entry_id = $comment_data['0']['entry_id'];
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+		switch($type)
+		{
+			case 'comment':
+			case 'entry':
+				$channel_field = $this->get_custom_field_name($entry_id, $type);
+				if($channel_field)
+				{
+					//$data = array($channel_field => )
+					$field_data = $this->EE->channel_data->get_custom_field_data($channel_field, array('entry_id' => $entry_id));
+					if($field_data == '')
+					{
+						$field_data = '0';
+					}
+					
+					$field_data++;
+					$this->EE->db->update('channel_data', array($channel_field => $field_data), array('entry_id' => $entry_id));
+					
+				}
+				
+			break;
+		}
+	}
+	
+	public function get_custom_field_name($entry_id, $type = 'entry')
+	{
+		$this->EE->db->select("cf.*");
+		$this->EE->db->from('channel_fields cf');
+		$this->EE->db->join('channels c', 'cf.group_id = c.field_group');
+		$this->EE->db->join('channel_titles ct', 'ct.channel_id = c.channel_id');
+		$this->EE->db->where('ct.entry_id', $entry_id);
+		$this->EE->db->where('cf.field_type', 'flag_master');
+		
+		$data = $this->EE->db->get()->result_array();	
+		if(count($data) >= '1')
+		{
+			foreach($data AS $key => $value)
+			{
+				$settings = unserialize(base64_decode($value['field_settings']));
+				if($settings['flag_type'] == $type)
+				{
+					return 'field_id_'.$value['field_id'];
+				}
+			}
+		}
+		
+		return FALSE;
 	}
 	
 	public function send_status_notification(array $profile_data, $entry_id)

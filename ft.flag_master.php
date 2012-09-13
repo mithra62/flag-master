@@ -56,12 +56,14 @@ class Flag_master_ft extends EE_Fieldtype
 		$this->EE->load->helper('text');
 		$this->EE->lang->loadfile('flag_master');
 		$this->query_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=flag_master';
-		$this->url_base = BASE.AMP.$this->query_base;		
+		if(defined('BASE'))
+			$this->url_base = BASE.AMP.$this->query_base;		
 		
 		$this->EE->load->library('javascript');
 		$this->EE->load->library('table');
 		$this->EE->load->model('field_model');
-		$this->EE->load->helper('form');	
+		$this->EE->load->helper('form');
+
 	}		
 
 	public function display_field($data)
@@ -126,14 +128,14 @@ class Flag_master_ft extends EE_Fieldtype
 	function save_settings($data)
 	{
 		return array(
-				'flag_type'		=> $this->EE->input->post('flag_type')
+			'flag_type'		=> $this->EE->input->post('flag_type')
 		);
 	}	
 	
 	public function install()
 	{
 		return array(
-				'flag_type' => 'entry',
+			'flag_type' => 'entry',
 		);
 	}	
 	
@@ -186,7 +188,9 @@ class Flag_master_ft extends EE_Fieldtype
 	
 	public function pre_process($data){}
 
-	public function replace_tag($data, $params = FALSE, $tagdata = FALSE){}
+	public function replace_tag($data, $params = FALSE, $tagdata = FALSE){
+		
+	}
 
 	public function post_save($data){}
 
