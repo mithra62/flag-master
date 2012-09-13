@@ -27,8 +27,12 @@ class Flag_master_ft extends EE_Fieldtype
 		'version'	=> '1.0'
 	);
 
-
-	public $flag_types = array('entry' => 'Entry', 'comment' => 'Comment');
+	public $flag_types = array(
+			'entry' => 'Entry', 
+			'comment' => 'Comment'
+	);
+	
+	public $zenbu_data = array();
 		
 	public function __construct()
 	{
@@ -51,9 +55,12 @@ class Flag_master_ft extends EE_Fieldtype
 		$this->EE->load->helper('utilities');
 		$this->EE->load->helper('text');
 		$this->EE->lang->loadfile('flag_master');
+		$this->query_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=flag_master';
+		$this->url_base = BASE.AMP.$this->query_base;		
 		
 		$this->EE->load->library('javascript');
 		$this->EE->load->library('table');
+		$this->EE->load->model('field_model');
 		$this->EE->load->helper('form');	
 	}		
 
@@ -133,7 +140,47 @@ class Flag_master_ft extends EE_Fieldtype
 	public function save($data)
 	{
 		return $data;
-	}	
+	}
+
+	public function zenbu_display($entry_id, $channel_id, $data, $table_data, $field_id, $settings, $rules, $upload_prefs, $installed_addons)
+	{
+		if($data == '')
+		{
+			$data = '0';
+		}
+		
+		$type = 'entry';
+		$url = $data;
+		if(isset($table_data[$field_id]['field_data']['field_settings']))
+		{
+			$settings = unserialize(base64_decode($table_data[$field_id]['field_data']['field_settings']));
+			$type = (isset($settings['flag_type']) ? $settings['flag_type'] : $type);
+		}
+		
+		switch($type)
+		{
+			case 'entry':
+				$url = '<a href="'.$this->url_base.AMP.'method=view_entry_flags'.AMP.'entry_id='.$entry_id.'">'.lang('view').' ('.$data.')'.'</a>';
+			break;
+				
+			case 'comment':
+				$url = '<a href="'.$this->url_base.AMP.'method=view_entry_comment_flags'.AMP.'entry_id='.$entry_id.'">'.lang('view').' ('.$data.')'.'</a>';
+			break;
+		}
+		
+		return $url;
+	}
+	
+	public function zenbu_get_table_data($entry_ids, $field_ids, $channel_id, $output_upload_prefs, $settings, $rel_array)
+	{
+		$total = count($entry_ids);
+		foreach($field_ids AS $key => $value)
+		{
+			$data[$value]['field_data'] = $this->EE->field_model->get_field($value)->row_array();
+		}
+		
+		return $data;
+	}
 
 	public function unsinstall(){}
 	

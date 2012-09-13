@@ -419,6 +419,53 @@ class Flag_master_mcp
 		return $this->EE->load->view('view_entry_flags', $vars, TRUE);		
 	}
 	
+	public function view_entry_comment_flags()
+	{
+		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_comment_flags'));
+		$entry_id = $this->EE->input->get_post('entry_id', FALSE);
+		if(!$entry_id)
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_options'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$entry_data = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));
+		if(!$entry_data || !isset($entry_data['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('entry_not_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$where = array('entry_id' => $entry_id, 'fmp.type' => 'entry');
+		$entry_flags = $this->EE->flag_master_flags->get_entry_flags($where);
+		if(!$entry_flags || !isset($entry_flags['0']))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_flags_found'));
+			$this->EE->functions->redirect($this->url_base.'profiles');
+			exit;
+		}
+	
+		$flag_meta = $this->EE->flag_master_flags->get_entry_flag_meta($where);
+		$entry_data = $entry_data['0'];
+		$where = array('id' => $entry_flags['0']['profile_id']);
+		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+		$vars = array();
+		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
+		$vars['profile_data'] = $profile_data;
+		$vars['entry_data'] = $entry_data;
+		$vars['flag_meta'] = $flag_meta;
+		$vars['entry_flags'] = $entry_flags;
+		$vars['profile_id'] = $entry_flags['0']['profile_id'];
+		$vars['flagged_comments'] = $this->EE->flag_master_flags->get_flagged_comments(array('c.entry_id' => $entry_id));
+
+		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
+		$this->EE->javascript->compile();
+		return $this->EE->load->view('view_entry_comment_flags', $vars, TRUE);
+	}	
+	
 	public function view_entry_flag_option()
 	{
 		$this->EE->load->library('user_agent');
