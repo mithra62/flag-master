@@ -10,4 +10,5 @@ else
 }
 ?>	
 </div>
+<input type="hidden" value="<?php echo $field_value; ?>" name="field_id_<?php echo $field_id; ?>" />
 

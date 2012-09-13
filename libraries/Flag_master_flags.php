@@ -99,6 +99,30 @@ class Flag_master_flags
 	}
 	
 	/**
+	 * Returns meta information about an entries flags
+	 * @param array $where
+	 */
+	public function get_entry_comment_flag_meta(array $where = array())
+	{
+		$this->EE->db->select("c.entry_id, COUNT(fmf.id) AS total_flags, MIN(fmf.created_date) AS first_flag, MAX(fmf.created_date) AS last_flag");
+
+		$this->EE->db->from('flag_master_profiles fmp');
+		$this->EE->db->join('flag_master_flags fmf', 'fmf.profile_id = fmp.id');
+		$this->EE->db->join('comments c', 'c.comment_id = fmf.entry_id');
+		$this->EE->db->join('channel_titles ct', 'ct.entry_id = c.entry_id');		
+		foreach($where AS $key => $value)
+		{
+			$this->EE->db->where($key, $value);
+		}
+		$data = $this->EE->db->get();
+		$return = $data->result_array();
+		if(isset($return['0']))
+		{
+			return $return['0'];
+		}
+	}	
+	
+	/**
 	 * Removes a profile and all associated data
 	 * @param int $profile_id
 	 */
@@ -129,7 +153,10 @@ class Flag_master_flags
 		
 		$this->EE->db->where('fmp.type', 'comment');
 		
-		$this->EE->db->where($where);
+		foreach($where AS $key => $value)
+		{
+			$this->EE->db->where($key, $value);
+		}
 		$this->EE->db->group_by('c.comment_id');
 		$this->EE->db->limit($limit);
 		$data = $this->EE->db->get();

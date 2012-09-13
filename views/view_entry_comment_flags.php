@@ -11,10 +11,9 @@
 <br clear="all" />
 <div>
 <?php 
-$this->table->set_heading(lang('entry_title'), lang('profile'), lang('total_flags'), lang('first_flag'), lang('last_flag'));
+$this->table->set_heading(lang('entry_title'), lang('total_flags'), lang('first_flag'), lang('last_flag'));
 $data = array(
 		'<a href="'.$entry_view_url.'">'.$entry_data['title'].'</a>', 
-		$profile_data['name'], 
 		$flag_meta['total_flags'],
 		m62_convert_timestamp($flag_meta['first_flag']),
 		m62_convert_timestamp($flag_meta['last_flag'])

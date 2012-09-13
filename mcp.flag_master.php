@@ -438,8 +438,8 @@ class Flag_master_mcp
 			exit;
 		}
 	
-		$where = array('entry_id' => $entry_id, 'fmp.type' => 'entry');
-		$entry_flags = $this->EE->flag_master_flags->get_entry_flags($where);
+		$where = array('c.entry_id' => $entry_id, 'fmp.type' => 'comment');
+		$entry_flags = $this->EE->flag_master_flags->get_flagged_comments($where);
 		if(!$entry_flags || !isset($entry_flags['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('no_flags_found'));
@@ -447,17 +447,15 @@ class Flag_master_mcp
 			exit;
 		}
 	
-		$flag_meta = $this->EE->flag_master_flags->get_entry_flag_meta($where);
+		//$where = array('fmf.entry_id' => $entry_id, 'fmp.type' => 'comment');
+		$flag_meta = $this->EE->flag_master_flags->get_entry_comment_flag_meta($where);
 		$entry_data = $entry_data['0'];
-		$where = array('id' => $entry_flags['0']['profile_id']);
-		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+		
 		$vars = array();
 		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
-		$vars['profile_data'] = $profile_data;
 		$vars['entry_data'] = $entry_data;
 		$vars['flag_meta'] = $flag_meta;
 		$vars['entry_flags'] = $entry_flags;
-		$vars['profile_id'] = $entry_flags['0']['profile_id'];
 		$vars['flagged_comments'] = $this->EE->flag_master_flags->get_flagged_comments(array('c.entry_id' => $entry_id));
 
 		$this->EE->cp->add_js_script('ui', 'accordion');

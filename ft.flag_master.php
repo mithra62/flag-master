@@ -55,7 +55,7 @@ class Flag_master_ft extends EE_Fieldtype
 		$this->EE->load->helper('utilities');
 		$this->EE->load->helper('text');
 		$this->EE->lang->loadfile('flag_master');
-		$this->query_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=flag_master';
+		$this->query_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name;
 		if(defined('BASE'))
 			$this->url_base = BASE.AMP.$this->query_base;		
 		
@@ -112,6 +112,8 @@ class Flag_master_ft extends EE_Fieldtype
 		
 		$vars['flagged_entries'] = $flags;
 		$vars['field_settings'] = $field_settings;
+		$vars['field_id'] = $this->settings['field_id'];
+		$vars['field_value'] = ($data == '' ? '0' : $data);
 		return $this->EE->load->view('ft', $vars, TRUE);
 
 	}
