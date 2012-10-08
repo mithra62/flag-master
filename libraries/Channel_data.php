@@ -751,6 +751,16 @@ class Channel_data
 		$this->EE->db->where('entry_id', $entry_id);
 		$this->EE->db->update('channel_titles', $data);		
 	}
+	
+	public function update_comment_status($comment_id, $status = 'c')
+	{
+		$data = array(
+				'status' => $status
+		);
+	
+		$this->EE->db->where('comment_id', $comment_id);
+		$this->EE->db->update('comments', $data);
+	}	
 
 	/**
 	 * Setup Relationships

@@ -95,5 +95,6 @@ Flag Master :)
 'view_entry_comment_flags' => 'Entry Flagged Comments',
 'settings' => 'Settings',
 'no_flags_found' => 'No Flags Found',
+'title' => 'Title',
 ''=>''
 );

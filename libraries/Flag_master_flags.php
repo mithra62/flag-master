@@ -258,7 +258,7 @@ class Flag_master_flags
 					
 					default:
 					case 'comment':
-						$this->EE->channel_data->update_comment_status($entry_id, 'closed');
+						$this->EE->channel_data->update_comment_status($entry_id, 'c');
 					break;
 				}
 				$this->send_status_notification($profile_data, $entry_id);
