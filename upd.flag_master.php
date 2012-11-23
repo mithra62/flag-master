@@ -134,7 +134,7 @@ class Flag_master_upd
 			return FALSE;
 		}
 		
-		if($current > 1.1)
+		if(version_compare($current, '1.1', '<'))
 		{
 			$sql = "
 				ALTER TABLE `exp_flag_master_profiles` ADD `notify_email_subject` VARCHAR( 255 ) NOT NULL AFTER `notify_emails` ,
