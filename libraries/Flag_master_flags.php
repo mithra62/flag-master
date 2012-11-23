@@ -283,6 +283,12 @@ class Flag_master_flags
 			$key = 'option_other_'.$data['option_id'];
 			$data['user_defined'] = (isset($data[$key]) ? $data[$key] : $data['user_defined']);
 		}
+		
+		if($profile_data['notify_email_multiplier'] != '0' && ($total_flags+1) >= $profile_data['notify_email_multiplier'] && (($total_flags+1) % $profile_data['notify_email_multiplier'] == '0'))
+		{
+			$this->send_flag_notification($data, $profile_data, $entry_id);
+		}
+		exit;		
 
 		$this->update_ft_values($entry_id, $profile_data['type']);
 		if($this->EE->flag_master_flags_model->add_flag($data))
@@ -290,6 +296,7 @@ class Flag_master_flags
 			$this->EE->flag_master_profiles->update_profile_flag_count($profile_id, 1);
 			$this->EE->flag_master_profile_options->update_profile_option_flag_count($data['option_id'], 1);
 			$this->proc_session_tracking($entry_id, $data['option_id'], $profile_id);
+			
 			if($profile_data['notify_email_multiplier'] != '0' && ($total_flags+1) >= $profile_data['notify_email_multiplier'] && (($total_flags+1) % $profile_data['notify_email_multiplier'] == '0'))
 			{
 				$this->send_flag_notification($data, $profile_data, $entry_id);
@@ -470,6 +477,9 @@ class Flag_master_flags
 
 		$message = $this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars));
 		$this->EE->email->message($message);
+		$this->EE->email->mailtype = $profile_data['notify_email_mailtype'];
+		echo 'fdsa';
+		exit;
 		$this->EE->email->send();
 		return TRUE;
 	}	

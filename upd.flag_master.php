@@ -61,7 +61,8 @@ class Flag_master_upd
 	
 		$this->EE->db->insert('modules', $data);
 		
-		$sql = "INSERT INTO exp_actions (class, method) VALUES ('".$this->class."', 'proc_flag')";
+		$db_prefix = $this->EE->db->dbprefix;
+		$sql = "INSERT INTO ".$db_prefix."actions (class, method) VALUES ('".$this->class."', 'proc_flag')";
 		$this->EE->db->query($sql);
 		
 		$this->add_settings_table();
@@ -134,10 +135,11 @@ class Flag_master_upd
 			return FALSE;
 		}
 		
+		$db_prefix = $this->EE->db->dbprefix;
 		if(version_compare($current, '1.1', '<'))
 		{
 			$sql = "
-				ALTER TABLE `exp_flag_master_profiles` ADD `notify_email_subject` VARCHAR( 255 ) NOT NULL AFTER `notify_emails` ,
+				ALTER TABLE `".$db_prefix."flag_master_profiles` ADD `notify_email_subject` VARCHAR( 255 ) NOT NULL AFTER `notify_emails` ,
 				ADD `notify_email_message` TEXT NOT NULL AFTER `notify_email_subject` ,
 				ADD `notify_email_mailtype` VARCHAR( 10 ) NOT NULL AFTER `notify_email_message` ,
 				ADD `notify_email_multiplier` INT( 3 ) NOT NULL AFTER `notify_email_mailtype` ";	
