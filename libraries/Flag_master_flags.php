@@ -201,6 +201,12 @@ class Flag_master_flags
 		return $data->result_array();
 	}
 	
+	/**
+	 * Returns the total number of flags for passed values
+	 * @param int $entry_id
+	 * @param string $type
+	 * @return string
+	 */
 	public function get_total_flags($entry_id, $type = 'entry')
 	{
 		$return = '0';
@@ -244,10 +250,11 @@ class Flag_master_flags
 			return lang('no_profile');
 		}
 		
+		$this->EE->load->library('email');
+		$total_flags = $this->get_total_flags($entry_id, $profile_data['type']);
 		if($profile_data['auto_close_threshold'] >= '1')
 		{
 			//proc auto close threshold
-			$total_flags = $this->get_total_flags($entry_id, $profile_data['type']);
 			if(($total_flags+1) >= $profile_data['auto_close_threshold'])
 			{
 				switch($profile_data['type'])
@@ -264,7 +271,7 @@ class Flag_master_flags
 				$this->send_status_notification($profile_data, $entry_id);
 			}
 		}
-
+		
 		$option_data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $data['option_id']));
 		$data['option_id'] = $data['option_id'];
 		$data['entry_id'] = $entry_id;
@@ -283,13 +290,23 @@ class Flag_master_flags
 			$this->EE->flag_master_profiles->update_profile_flag_count($profile_id, 1);
 			$this->EE->flag_master_profile_options->update_profile_option_flag_count($data['option_id'], 1);
 			$this->proc_session_tracking($entry_id, $data['option_id'], $profile_id);
+			if($profile_data['notify_email_multiplier'] != '0' && ($total_flags+1) >= $profile_data['notify_email_multiplier'] && (($total_flags+1) % $profile_data['notify_email_multiplier'] == '0'))
+			{
+				$this->send_flag_notification($data, $profile_data, $entry_id);
+			}
 			
 			return TRUE;
 		}
 	}
 	
+	/**
+	 * Handles the FieldType modifications
+	 * @param int $entry_id
+	 * @param string $type
+	 */
 	public function update_ft_values($entry_id, $type)
 	{
+		//validate the data if it's a comment being flagged
 		if($type == 'comment')
 		{
 			$comment_id = $entry_id;
@@ -327,6 +344,12 @@ class Flag_master_flags
 		}
 	}
 	
+	/**
+	 * Returns the channel_data column name for $entry_id and $type
+	 * @param int $entry_id
+	 * @param string $type
+	 * @return string|boolean
+	 */
 	public function get_custom_field_name($entry_id, $type = 'entry')
 	{
 		$this->EE->db->select("cf.*");
@@ -352,6 +375,12 @@ class Flag_master_flags
 		return FALSE;
 	}
 	
+	/**
+	 * Sends the email on item status change
+	 * @param array $profile_data
+	 * @param int $entry_id
+	 * @return boolean
+	 */
 	public function send_status_notification(array $profile_data, $entry_id)
 	{
 		$to = array();
@@ -384,6 +413,66 @@ class Flag_master_flags
 		$this->EE->email->message($message);
 		$this->EE->email->send();
 	}
+	
+	/**
+	 * Sends the flag notification email
+	 * @param array $flag_data
+	 * @param array $profile_data
+	 * @param int $entry_id
+	 * @return boolean
+	 */
+	public function send_flag_notification(array $flag_data, array $profile_data, $entry_id)
+	{
+		if(!isset($this->EE->TMPL))
+		{
+			$this->EE->load->library('Template', null, 'TMPL');
+		}
+				
+		//a little sanity check here...
+		$profile_data['notify_email_subject'] = ($profile_data['notify_email_subject'] == '' ? lang('notify_email_subject_copy') : $profile_data['notify_email_subject']);
+		$profile_data['notify_email_message'] = ($profile_data['notify_email_message'] == '' ? lang('notify_email_message_copy') : $profile_data['notify_email_message']);
+		$profile_data['notify_email_mailtype'] = ($profile_data['notify_email_mailtype'] == '' ? 'Text' : $profile_data['notify_email_mailtype']);
+		
+		$to = array();
+		$emails = explode("\n", $profile_data['notify_emails']);
+		foreach($emails AS $email)
+		{
+			if($this->EE->flag_master_lib->check_email($email))
+			{
+				$to[] = $email;
+			}
+		}
+	
+		if(count($to) == '0')
+		{
+			return FALSE;
+		}
+	
+		$this->EE->email->clear();
+		$this->EE->email->from($this->EE->config->config['webmaster_email'], $this->EE->config->config['site_name']);
+		$this->EE->email->to($to);
+		
+		$url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;
+		if($profile_data['type'] == 'comment')
+		{
+			$url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+		}
+				
+		$vars = array_merge(
+				array('flag_data' => array($flag_data)), 
+				array('profile_data' => array($profile_data)), 
+				array('view_flag_url' => $url),
+				$profile_data,
+				$this->EE->config->config
+		);
+		$subject = $this->EE->TMPL->parse_variables($profile_data['notify_email_subject'], array($vars));
+		$this->EE->email->subject($subject);
+
+		$message = $this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars));
+		$this->EE->email->message($message);
+		$this->EE->email->send();
+		return TRUE;
+	}	
 	
 	/**
 	 * Wrapper to process the session tracker

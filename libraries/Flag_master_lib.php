@@ -102,6 +102,11 @@ class Flag_master_lib
 		return $errors;
 	}
 
+	/**
+	 * Checks a given email is valid
+	 * @param string $email
+	 * @return mixed
+	 */
 	public function check_email($email)
 	{
 		if(function_exists('filter_var'))
@@ -110,9 +115,10 @@ class Flag_master_lib
 		}
 		else
 		{
-			return $this->valid_email($email);
+			$this->EE->load->helper('email');
+			return valid_email($email);
 		}
-	}	
+	}
 	
 	/**
 	 * Returns an array for configuring the EE pagination mechanism 

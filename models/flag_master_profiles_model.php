@@ -44,6 +44,15 @@ class Flag_master_profiles_model extends CI_Model
 							'comment' => 'comment'			
 	);
 	
+	/**
+	 * The available options for specifying the email format
+	 * @var array
+	 */
+	public $email_format_options = array(
+			'text' => 'Text',
+			'html' => 'HTML'
+	);	
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -61,6 +70,10 @@ class Flag_master_profiles_model extends CI_Model
 		   'type' => $profile['type'],
 		   'active' => $profile['active'],
 		   'notify_emails' => $profile['notify_emails'],
+		   'notify_email_subject' => $profile['notify_email_subject'],
+		   'notify_email_message' => $profile['notify_email_message'],
+		   'notify_email_mailtype' => $profile['notify_email_mailtype'],
+		   'notify_email_multiplier' => $profile['notify_email_multiplier'],
 		   'auto_close_threshold' => $profile['auto_close_threshold'],
 		   'last_modified' => date('Y-m-d H:i:s')
 		);

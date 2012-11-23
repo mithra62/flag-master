@@ -376,6 +376,7 @@ class Channel_data
 	
 	public function clean_securitee_data($data)
 	{
+		$this->EE->load->library('encrypt');
 		return $this->EE->encrypt->decode(htmlspecialchars_decode($data));
 	}
 

@@ -41,6 +41,12 @@ class Flag_master_mcp
 	 * @var string
 	 */
 	private $mod_name = '';
+	
+	/**
+	 * The breadcrumb override
+	 * @var array
+	 */
+	protected static $_breadcrumbs = array();	
 		
 	public function __construct()
 	{
@@ -91,8 +97,16 @@ class Flag_master_mcp
 		if($this->settings['disable_accordions'] === FALSE && !in_array($method, $ignore_methods))
 		{
 			$this->EE->javascript->output($this->EE->flag_master_js->get_accordian_css());
-		}		
+		}
+
+		$this->add_breadcrumb($this->url_base.'index', lang('flag_master_module_name'));
 	}
+	
+	private function add_breadcrumb($link, $title)
+	{
+		self::$_breadcrumbs[$link] = $title;
+		$this->EE->load->vars(array('cp_breadcrumbs' => self::$_breadcrumbs));
+	}	
 	
 	public function index()
 	{
@@ -123,7 +137,7 @@ class Flag_master_mcp
 	{
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('add_profile'));
 		$this->EE->form_validation->set_rules('name', 'Name', 'required');
-		$proc_profile = $this->EE->input->get_post('go_profile_form', FALSE);
+		
 		if ($this->EE->form_validation->run() == TRUE)
 		{
 			$data = $_POST;
@@ -138,12 +152,14 @@ class Flag_master_mcp
 		
 		$this->EE->cp->add_js_script('ui', 'accordion');
 		$this->EE->javascript->output($this->EE->flag_master_js->get_accordian_css());
-		$this->EE->javascript->output($this->EE->flag_master_js->get_form_profile());
-		 
+		$this->EE->javascript->output($this->EE->flag_master_js->get_form_profile());		 
 		$this->EE->javascript->compile();
+		
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
 		
 		$vars = array();
 		$vars['profile_data'] = array();
+		$vars['email_format_options'] = $this->EE->flag_master_profiles_model->email_format_options;
 		return $this->EE->load->view('add_profile', $vars, TRUE);		
 	}
 	
@@ -177,6 +193,7 @@ class Flag_master_mcp
 		//$flagged_items = $this->EE->flag_master_flags->get_flags();
 		
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_profile'));
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));		
 		
 		$vars['profile_data'] = $profile_data;
 		$vars['flag_options'] = $flag_options;
@@ -219,11 +236,20 @@ class Flag_master_mcp
 				exit;
 			}
 		}		
+
+		$this->EE->cp->add_js_script('ui', 'accordion');
+		$this->EE->javascript->output($this->EE->flag_master_js->get_accordian_css());
+		$this->EE->javascript->output($this->EE->flag_master_js->get_form_profile());
+		$this->EE->javascript->compile();
 				
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('edit_profile'));
 		
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
+		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$profile_data['id'], $profile_data['name']);
+		
 		$vars['profile_id'] = $profile_id;
 		$vars['profile_data'] = $profile_data;
+		$vars['email_format_options'] = $this->EE->flag_master_profiles_model->email_format_options;
 		return $this->EE->load->view('edit_profile', $vars, TRUE);	
 	}
 	
@@ -251,6 +277,8 @@ class Flag_master_mcp
 
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('delete_profiles_confirm'));
 		$this->EE->cp->set_variable('delete_profiles_question', $this->EE->lang->line('delete_profiles_confirm'));
+
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
 	
 		$vars = array();
 		$vars['form_action'] = $this->query_base.'delete_profiles';
@@ -312,6 +340,9 @@ class Flag_master_mcp
 		$this->EE->javascript->output($this->EE->flag_master_js->get_form_profile());
 		$this->EE->javascript->compile();
 		
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
+		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$profile_data['id'], $profile_data['name']);		
+		
 		$vars['option_data'] = array();
 		$vars['profile_id'] = $profile_id;
 		return $this->EE->load->view('add_option', $vars, TRUE);		
@@ -344,6 +375,9 @@ class Flag_master_mcp
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_option'));
+
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
+		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$profile_data['id'], $profile_data['name']);		
 				
 		$vars['option_data'] = $option_data;
 		$vars['profile_data'] = $profile_data;
@@ -763,6 +797,12 @@ class Flag_master_mcp
 		}
 	
 		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('edit_option'));
+		$where = array('id' => $option_data['profile_id']);
+		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
+
+		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
+		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$option_data['profile_id'], $profile_data['name']);
+		$this->add_breadcrumb($this->url_base.'view_option'.AMP.'option_id='.$option_data['id'], $option_data['title']);		
 	
 		$vars['option_id'] = $option_id;
 		$vars['option_data'] = $option_data;

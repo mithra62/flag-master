@@ -1,24 +1,24 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
  /**
- * mithra62 - EE Add-on Stub
+ * mithra62 - Flag Master
  *
- * @package		mithra62:EE_addon_stub
+ * @package		mithra62:Flag_master
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2012, mithra62, Eric Lamb.
- * @link		http://blah.com
+ * @link		http://mithra62.com/projects/view/flag-master/
  * @version		1.0
- * @filesource 	./system/expressionengine/third_party/ee_addon_stub/
+ * @filesource 	./system/expressionengine/third_party/flag_master/
  */
  
  /**
- * EE Add-on Stub - Upd Class
+ * Flag Master - Upd Class
  *
  * Updater class
  *
- * @package 	mithra62:Ee_addon_stub
+ * @package 	mithra62:Flag_master
  * @author		Eric Lamb
- * @filesource 	./system/expressionengine/third_party/ee_addon_stub/upd.flag_master.php
+ * @filesource 	./system/expressionengine/third_party/flag_master/upd.flag_master.php
  */
 class Flag_master_upd 
 {     
@@ -133,6 +133,16 @@ class Flag_master_upd
 		{
 			return FALSE;
 		}
+		
+		if($current > 1.1)
+		{
+			$sql = "
+				ALTER TABLE `exp_flag_master_profiles` ADD `notify_email_subject` VARCHAR( 255 ) NOT NULL AFTER `notify_emails` ,
+				ADD `notify_email_message` TEXT NOT NULL AFTER `notify_email_subject` ,
+				ADD `notify_email_mailtype` VARCHAR( 10 ) NOT NULL AFTER `notify_email_message` ,
+				ADD `notify_email_multiplier` INT( 3 ) NOT NULL AFTER `notify_email_mailtype` ";	
+			$this->EE->db->query($sql);
+		}
 	}	
 	
 	private function add_settings_table()
@@ -154,8 +164,7 @@ class Flag_master_upd
 										),
 						'setting_value'  => array(
 											'type' 			=> 'text',
-											'null'			=> FALSE,
-											'default'		=> ''
+											'null'			=> FALSE
 										),
 						'serialized' => array(
 											'type' => 'int',
@@ -213,8 +222,29 @@ class Flag_master_upd
 				),
 				'notify_emails'  => array(
 						'type' 			=> 'text',
+						'null'			=> FALSE
+				),
+				'notify_email_subject'	=> array(
+						'type' 			=> 'varchar',
+						'constraint'	=> '255',
 						'null'			=> FALSE,
 						'default'		=> ''
+				),	
+				'notify_email_message'  => array(
+						'type' 			=> 'text',
+						'null'			=> FALSE
+				),
+				'notify_email_mailtype'	=> array(
+						'type' 			=> 'varchar',
+						'constraint'	=> '10',
+						'null'			=> FALSE,
+						'default'		=> ''
+				),		
+				'notify_email_multiplier'	=> array(
+						'type' 			=> 'int',
+						'constraint'	=> 3,
+						'null'			=> FALSE,
+						'default'		=> '0'
 				),
 				'auto_close_threshold'	=> array(
 						'type' 			=> 'int',
@@ -233,20 +263,6 @@ class Flag_master_upd
 		$this->EE->dbforge->add_field($fields);
 		$this->EE->dbforge->add_key('id', TRUE);
 		$this->EE->dbforge->create_table($this->profiles_table, TRUE);
-	
-		/**
-		$data = array(
-				'name' => 'Entry Profile Example',
-				'active' => '0',
-				'created_by' => $this->EE->session->userdata['member_id'],
-				'type' => 'entry',
-				'total_flags' => '0',
-				'last_modified' => date('Y-m-d H:i:s'),
-				'created_date' => date('Y-m-d H:i:s')
-		);
-	
-		$this->EE->db->insert($this->profiles_table, $data);
-		**/
 	}	
 	
 	private function add_profile_options_table()

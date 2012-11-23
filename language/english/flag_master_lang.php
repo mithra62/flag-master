@@ -96,5 +96,22 @@ Flag Master :)
 'settings' => 'Settings',
 'no_flags_found' => 'No Flags Found',
 'title' => 'Title',
+'notification_prefs' => 'Notification Preferences',
+'general' => 'General',
+'setting' => 'Setting',
+'value' => 'Value',
+'notify_email_subject_copy' => '{site_name} - Flagged Item',
+'notify_email_message_copy' => 'Hello,
+		
+An item has been flagged on {site_name} under {profile_name}.
+		
+{view_flag_url}
+		
+Copy and paste the URL in a new browser window if you can\'t click on it.
+		
+{site_name}
+{site_url}
+		
+Please don\'t respond to this email; all emails are automatically deleted. 	',		
 ''=>''
 );
