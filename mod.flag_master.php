@@ -86,6 +86,10 @@ class Flag_master
 			$this->offset = $this->EE->TMPL->fetch_param('offset', '0');
 			$this->order = $this->EE->TMPL->fetch_param('order', FALSE);	
 		}	
+		
+		$this->query_base = 'D=cp'.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=flag_master'.AMP.'method=';
+		$this->url_base = $this->EE->config->config['cp_url'].'?'.$this->query_base;
+		$this->EE->flag_master_lib->set_url_base($this->url_base);		
 	}
 	
 	public function action_test()

@@ -22,6 +22,10 @@
  */
 class Flag_master_mcp 
 {
+	/**
+	 * The complete URL to module sans method
+	 * @var string
+	 */
 	public $url_base = '';
 	
 	/**

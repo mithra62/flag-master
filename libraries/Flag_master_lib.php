@@ -64,6 +64,11 @@ class Flag_master_lib
 		$this->url_base = $url_base;
 	}
 	
+	public function get_url_base()
+	{
+		return $this->url_base;
+	}
+	
 	public function perpage_select_options()
 	{
 		return array(

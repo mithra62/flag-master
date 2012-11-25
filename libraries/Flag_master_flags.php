@@ -142,7 +142,12 @@ class Flag_master_flags
 		return $flag_data;
 	}	
 	
-	public function get_flagged_comments($where = array(), $limit = '100')
+	/**
+	 * Returns the flagged comments on $where
+	 * @param array $where
+	 * @param int $limit
+	 */
+	public function get_flagged_comments(array $where = array(), $limit = '100')
 	{
 		$this->EE->db->select("c.*, ct.title AS entry_title,  fmp.name AS profile_name, COUNT(fmf.id) AS total_flags, MIN(fmf.created_date) AS first_flag, MAX(fmf.created_date) AS last_flag");
 		
@@ -251,6 +256,7 @@ class Flag_master_flags
 		}
 		
 		$this->EE->load->library('email');
+		$this->EE->load->library('user_agent');
 		$total_flags = $this->get_total_flags($entry_id, $profile_data['type']);
 		if($profile_data['auto_close_threshold'] >= '1')
 		{
@@ -287,8 +293,7 @@ class Flag_master_flags
 		if($profile_data['notify_email_multiplier'] != '0' && ($total_flags+1) >= $profile_data['notify_email_multiplier'] && (($total_flags+1) % $profile_data['notify_email_multiplier'] == '0'))
 		{
 			$this->send_flag_notification($data, $profile_data, $entry_id);
-		}
-		exit;		
+		}	
 
 		$this->update_ft_values($entry_id, $profile_data['type']);
 		if($this->EE->flag_master_flags_model->add_flag($data))
@@ -454,32 +459,46 @@ class Flag_master_flags
 		{
 			return FALSE;
 		}
-	
+
 		$this->EE->email->clear();
 		$this->EE->email->from($this->EE->config->config['webmaster_email'], $this->EE->config->config['site_name']);
 		$this->EE->email->to($to);
 		
-		$url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;
-		if($profile_data['type'] == 'comment')
+		$view_profile_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];
+		$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];
+		switch($profile_data['type'])
 		{
-			$url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+			case 'comment':
+				$entry_url = $this->EE->config->config['cp_url'].'?D=cp'.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=comment'.AMP.'method=edit_comment_form'.AMP.'comment_id='.$entry_id;
+				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_comment_flag_option'.AMP.'option_id='.$flag_data['option_id'].AMP.'comment_id='.$entry_id;
+				$flagged_item = $this->EE->channel_data->get_comments(array('comment_id' => $entry_id));
+				$flagged_item = (isset($flagged_item['0']['comment']) ? $flagged_item['0']['comment'] : '');
+			break;
+			
+			case 'entry':
+			default:
+				$entry_url = $this->EE->config->config['cp_url'].'?D=cp'.AMP.'C=content_publish'.AMP.'M=entry_form'.AMP.'entry_id='.$entry_id;	
+				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];							
+			break;
 		}
-				
+		
+		$option_data = $this->EE->flag_master_profile_options->get_profile_option(array('id' => $flag_data['option_id']));
+		$flag_data['option_title'] = $option_data['title'];		
 		$vars = array_merge(
-				array('flag_data' => array($flag_data)), 
-				array('profile_data' => array($profile_data)), 
-				array('view_flag_url' => $url),
+				$flag_data, 
+				$profile_data,
+				array('entry_url' => $entry_url, 'profile_url' => $view_profile_url, 'flag_url' => $view_flag_url, 'flagged_item' => $flagged_item),
+				array('ip_address' => $this->EE->input->ip_address(), 'user_agent' => $this->EE->agent->agent, 'username' => $this->EE->session->userdata['username']),
 				$profile_data,
 				$this->EE->config->config
 		);
-		$subject = $this->EE->TMPL->parse_variables($profile_data['notify_email_subject'], array($vars));
+				
+		$subject = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_subject'], array($vars)));
 		$this->EE->email->subject($subject);
-
-		$message = $this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars));
+		$message = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars)));
+		
 		$this->EE->email->message($message);
 		$this->EE->email->mailtype = $profile_data['notify_email_mailtype'];
-		echo 'fdsa';
-		exit;
 		$this->EE->email->send();
 		return TRUE;
 	}	

@@ -104,8 +104,26 @@ Flag Master :)
 'notify_email_message_copy' => 'Hello,
 		
 An item has been flagged on {site_name} under {profile_name}.
+
+--start--
+{flagged_item}
+--stop--
 		
-{view_flag_url}
+Details
+Username: {username}
+Option: {option_title}
+User Defined: {user_defined}
+IP: {ip_address}
+Agent: {user_agent}
+
+Flag URL:
+{flag_url}
+		
+Profile URL:
+{profile_url}
+		
+Entry URL:
+{entry_url}
 		
 Copy and paste the URL in a new browser window if you can\'t click on it.
 		
