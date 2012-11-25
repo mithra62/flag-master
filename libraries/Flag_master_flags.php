@@ -288,11 +288,6 @@ class Flag_master_flags
 		{
 			$key = 'option_other_'.$data['option_id'];
 			$data['user_defined'] = (isset($data[$key]) ? $data[$key] : $data['user_defined']);
-		}
-		
-		if($profile_data['notify_email_multiplier'] != '0' && ($total_flags+1) >= $profile_data['notify_email_multiplier'] && (($total_flags+1) % $profile_data['notify_email_multiplier'] == '0'))
-		{
-			$this->send_flag_notification($data, $profile_data, $entry_id);
 		}	
 
 		$this->update_ft_values($entry_id, $profile_data['type']);
@@ -464,21 +459,20 @@ class Flag_master_flags
 		$this->EE->email->from($this->EE->config->config['webmaster_email'], $this->EE->config->config['site_name']);
 		$this->EE->email->to($to);
 		
-		$view_profile_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];
-		$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];
+		$view_profile_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];
 		switch($profile_data['type'])
 		{
 			case 'comment':
-				$entry_url = $this->EE->config->config['cp_url'].'?D=cp'.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=comment'.AMP.'method=edit_comment_form'.AMP.'comment_id='.$entry_id;
-				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_comment_flag_option'.AMP.'option_id='.$flag_data['option_id'].AMP.'comment_id='.$entry_id;
+				$entry_url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_comment_flag_option&option_id='.$flag_data['option_id'].'&comment_id='.$entry_id;
 				$flagged_item = $this->EE->channel_data->get_comments(array('comment_id' => $entry_id));
 				$flagged_item = (isset($flagged_item['0']['comment']) ? $flagged_item['0']['comment'] : '');
 			break;
 			
 			case 'entry':
 			default:
-				$entry_url = $this->EE->config->config['cp_url'].'?D=cp'.AMP.'C=content_publish'.AMP.'M=entry_form'.AMP.'entry_id='.$entry_id;	
-				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile'.AMP.'profile_id='.$profile_data['profile_id'];							
+				$entry_url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;	
+				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];							
 			break;
 		}
 		
