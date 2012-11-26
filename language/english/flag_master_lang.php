@@ -130,6 +130,15 @@ Copy and paste the URL in a new browser window if you can\'t click on it.
 {site_name}
 {site_url}
 		
-Please don\'t respond to this email; all emails are automatically deleted. 	',		
+Please don\'t respond to this email; all emails are automatically deleted. 	',	
+
+'notify_email_multiplier' => 'Flag Notifier Multiplier',
+'notify_email_multiplier_instructions' => 'How often do you want to be notified of a flag? Every 3 flags? 5 flags?',
+'notify_email_subject' => 'Email Subject',
+'notify_email_subject_instructions' => 'The subject line for the flag notification email. You can use basic EE tags.',
+'notify_email_message' => 'Email Message',
+'notify_email_message_instructions' => 'The email message you want sent. You can use basic EE tags only. ',
+'notify_email_mailtype' => 'Email Mailtype',
+'notify_email_mailtype_instructions' => 'The format of the email being sent. ',
 ''=>''
 );

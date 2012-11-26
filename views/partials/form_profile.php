@@ -59,9 +59,9 @@ echo form_open($query_base.$form_action, array('id'=>'my_accordion'));
 	$defaults['notify_emails'] = (isset($profile['notify_emails']) ? $profile['notify_emails'] : FALSE);
 	$defaults['notify_email_multiplier'] = (isset($profile['notify_email_multiplier']) ? $profile['notify_email_multiplier'] : 5);
 	
-	$defaults['notify_email_subject'] = (isset($profile['notify_email_subject']) ? $profile['notify_email_subject'] : lang('notify_email_subject_copy'));
-	$defaults['notify_email_message'] = (isset($profile['notify_email_message']) ? $profile['notify_email_message'] : lang('notify_email_message_copy'));
-	$defaults['notify_email_mailtype'] = (isset($profile['notify_email_mailtype']) ? $profile['notify_email_mailtype'] : lang('notify_email_mailtype_copy'));
+	$defaults['notify_email_subject'] = (isset($profile['notify_email_subject']) && $profile['notify_email_subject'] != '' ? $profile['notify_email_subject'] : lang('notify_email_subject_copy'));
+	$defaults['notify_email_message'] = (isset($profile['notify_email_message']) && $profile['notify_email_message'] != '' ? $profile['notify_email_message'] : lang('notify_email_message_copy'));
+	$defaults['notify_email_mailtype'] = (isset($profile['notify_email_mailtype']) && $profile['notify_email_mailtype'] != '' ? $profile['notify_email_mailtype'] : lang('notify_email_mailtype_copy'));
 
 	$this->table->set_heading(lang('setting'), lang('value'));
 	$this->table->add_row('<label for="notify_email_multiplier">'.lang('notify_email_multiplier').'</label><div class="subtext">'.lang('notify_email_multiplier_instructions').'</div>', form_input('notify_email_multiplier', $defaults['notify_email_multiplier'], 'id="notify_email_multiplier"'));

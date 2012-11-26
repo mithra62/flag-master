@@ -472,7 +472,11 @@ class Flag_master_flags
 			case 'entry':
 			default:
 				$entry_url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;	
-				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];							
+				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];	
+				$flagged_item = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));				
+				$flagged_item = (isset($flagged_item['0']['title']) ? $flagged_item['0']['title'].' ('.$flagged_item['0']['channel_name'].')' : '');
+				
+
 			break;
 		}
 		
@@ -489,8 +493,8 @@ class Flag_master_flags
 				
 		$subject = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_subject'], array($vars)));
 		$this->EE->email->subject($subject);
-		$message = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars)));
-		
+		echo $message = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars)));
+		exit;
 		$this->EE->email->message($message);
 		$this->EE->email->mailtype = $profile_data['notify_email_mailtype'];
 		$this->EE->email->send();
