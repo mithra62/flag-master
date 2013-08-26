@@ -493,8 +493,8 @@ class Flag_master_flags
 				
 		$subject = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_subject'], array($vars)));
 		$this->EE->email->subject($subject);
-		echo $message = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars)));
-		exit;
+		$message = $this->EE->TMPL->parse_globals($this->EE->TMPL->parse_variables($profile_data['notify_email_message'], array($vars)));
+		
 		$this->EE->email->message($message);
 		$this->EE->email->mailtype = $profile_data['notify_email_mailtype'];
 		$this->EE->email->send();
