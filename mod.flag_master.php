@@ -81,7 +81,7 @@ class Flag_master
 		
 		if(isset($this->EE->TMPL))
 		{
-			$this->EE->meetup_lib->prefix = $this->prefix = $this->EE->TMPL->fetch_param('prefix', $this->prefix) . $this->delim;
+			$this->EE->flag_master_lib->prefix = $this->prefix = $this->EE->TMPL->fetch_param('prefix', $this->prefix) . $this->delim;
 			$this->per_page = $this->EE->TMPL->fetch_param('limit', '20');
 			$this->offset = $this->EE->TMPL->fetch_param('offset', '0');
 			$this->order = $this->EE->TMPL->fetch_param('order', FALSE);	

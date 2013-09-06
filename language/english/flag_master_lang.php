@@ -89,7 +89,16 @@ A comment on your site had it\'s status set to closed due to Flag Master. You ca
 Flag Master :)
 		',
 		
+'entry_status_change_notification_message' => '
 
+Hello,
+
+An entry on your site had it\'s status set to closed due to Flag Master. You can view your closed entry below:
+{view_url}
+		
+Flag Master :)
+		
+		',
 'flag_type' => 'Flag Type',
 'flag_type_instructions' => 'What type of Flags do you want displayed?',
 'view_entry_comment_flags' => 'Entry Flagged Comments',
