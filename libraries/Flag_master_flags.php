@@ -409,10 +409,10 @@ class Flag_master_flags
 		$this->EE->email->to($to);
 		$this->EE->email->subject($this->EE->config->config['site_name'].' '.lang($profile_data['type'].'_status_change_notification_subject'));
 		
-		$url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;
+		$url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;
 		if($profile_data['type'] == 'comment')
 		{
-			$url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+			$url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
 		}
 		
 		$message = lang($profile_data['type'].'_status_change_notification_message');
@@ -463,7 +463,7 @@ class Flag_master_flags
 		switch($profile_data['type'])
 		{
 			case 'comment':
-				$entry_url = $this->EE->config->config['cp_url'].'?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
+				$entry_url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
 				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_comment_flag_option&option_id='.$flag_data['option_id'].'&comment_id='.$entry_id;
 				$flagged_item = $this->EE->channel_data->get_comments(array('comment_id' => $entry_id));
 				$flagged_item = (isset($flagged_item['0']['comment']) ? $flagged_item['0']['comment'] : '');
@@ -471,7 +471,7 @@ class Flag_master_flags
 			
 			case 'entry':
 			default:
-				$entry_url = $this->EE->config->config['cp_url'].'?D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;	
+				$entry_url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;	
 				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];	
 				$flagged_item = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));				
 				$flagged_item = (isset($flagged_item['0']['title']) ? $flagged_item['0']['title'].' ('.$flagged_item['0']['channel_name'].')' : '');
