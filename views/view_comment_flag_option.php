@@ -84,7 +84,7 @@ $this->table->clear();
 				{
 					$username = substr($username, 0, 10).'...';
 				}
-				$option_row[] = '<a href="?D=cp&C=myaccount&id='.$flag['member_id'].'">'.$username.'</a>';
+				$option_row[] = '<a href="'.BASE.'&C=myaccount&id='.$flag['member_id'].'">'.$username.'</a>';
 			}
 			else
 			{

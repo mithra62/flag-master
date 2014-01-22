@@ -444,7 +444,7 @@ class Flag_master_mcp
 		$where = array('id' => $entry_flags['0']['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
-		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
+		$vars['entry_view_url'] = BASE.'&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
 		$vars['profile_data'] = $profile_data;
 		$vars['entry_data'] = $entry_data;
 		$vars['flag_meta'] = $flag_meta;
@@ -490,7 +490,7 @@ class Flag_master_mcp
 		$entry_data = $entry_data['0'];
 		
 		$vars = array();
-		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
+		$vars['entry_view_url'] = BASE.'&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
 		$vars['entry_data'] = $entry_data;
 		$vars['flag_meta'] = $flag_meta;
 		$vars['entry_flags'] = $entry_flags;
@@ -539,7 +539,7 @@ class Flag_master_mcp
 		$where = array('id' => $option_data['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
-		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
+		$vars['entry_view_url'] = BASE.'&C=content_publish&M=entry_form&channel_id='.$entry_data['channel_id'].'&entry_id='.$entry_id;
 		$vars['option_data'] = $option_data;
 		$vars['profile_data'] = $profile_data;
 		$vars['option_id'] = $option_id;
@@ -589,8 +589,8 @@ class Flag_master_mcp
 		$where = array('id' => $comment_flags['0']['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
-		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
-		$vars['comment_view_url'] = '?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
+		$vars['entry_view_url'] = BASE.'&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['comment_view_url'] = BASE.'&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
 		$vars['profile_data'] = $profile_data;
 		$vars['comment_data'] = $comment_data;
 		$vars['flag_meta'] = $flag_meta;
@@ -640,8 +640,8 @@ class Flag_master_mcp
 		$where = array('id' => $option_data['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		$vars = array();
-		$vars['entry_view_url'] = '?D=cp&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
-		$vars['comment_view_url'] = '?D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
+		$vars['entry_view_url'] = BASE.'&C=content_publish&M=entry_form&channel_id='.$comment_data['channel_id'].'&entry_id='.$comment_data['entry_id'];
+		$vars['comment_view_url'] = BASE.'&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$comment_data['comment_id'];
 		$vars['option_data'] = $option_data;
 		$vars['profile_data'] = $profile_data;
 		$vars['option_id'] = $option_id;
