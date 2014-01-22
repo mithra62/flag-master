@@ -24,12 +24,12 @@ class Flag_master_ft extends EE_Fieldtype
 {
 	public $info = array(
 		'name'		=> 'Flag Master',
-		'version'	=> '1.0'
+		'version'	=> '1.2'
 	);
 
 	public $flag_types = array(
-			'entry' => 'Entry', 
-			'comment' => 'Comment'
+		'entry' => 'Entry', 
+		'comment' => 'Comment'
 	);
 	
 	public $zenbu_data = array();

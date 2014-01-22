@@ -80,14 +80,25 @@ class Flag_master_upd
 		$data = array();
 		$data[] = array(
 					'class'      => $this->ext_class_name,
-					'method'    => 'void',
-					'hook'  => 'session_start',
+					'method'    => 'comment_entries_tagdata',
+					'hook'  => 'comment_entries_tagdata',
 				
 					'settings'    => '',
-					'priority'    => 1,
+					'priority'    => 10,
 					'version'    => $this->version,
 					'enabled'    => 'y'
 		);
+		
+		$data[] = array(
+				'class'      => $this->ext_class_name,
+				'method'    => 'channel_entries_tagdata',
+				'hook'  => 'channel_entries_tagdata',
+		
+				'settings'    => '',
+				'priority'    => 10,
+				'version'    => $this->version,
+				'enabled'    => 'y'
+		);		
 	
 		foreach($data AS $ex)
 		{
@@ -145,35 +156,42 @@ class Flag_master_upd
 				ADD `notify_email_multiplier` INT( 3 ) NOT NULL AFTER `notify_email_mailtype` ";	
 			$this->EE->db->query($sql);
 		}
+		
+		if(version_compare($current, '1.2', '<'))
+		{
+			$this->activate_extension(); //first install of extension
+		}		
+		
+		
 	}	
 	
 	private function add_settings_table()
 	{
 		$this->EE->load->dbforge();
 		$fields = array(
-						'id'	=> array(
-											'type'			=> 'int',
-											'constraint'	=> 10,
-											'unsigned'		=> TRUE,
-											'null'			=> FALSE,
-											'auto_increment'=> TRUE
-										),
-						'setting_key'	=> array(
-											'type' 			=> 'varchar',
-											'constraint'	=> '30',
-											'null'			=> FALSE,
-											'default'		=> ''
-										),
-						'setting_value'  => array(
-											'type' 			=> 'text',
-											'null'			=> FALSE
-										),
-						'serialized' => array(
-											'type' => 'int',
-											'constraint' => 1,
-											'null' => TRUE,
-											'default' => '0'
-						)										
+			'id' => array(
+				'type'			=> 'int',
+				'constraint'	=> 10,
+				'unsigned'		=> TRUE,
+				'null'			=> FALSE,
+				'auto_increment'=> TRUE
+			),
+			'setting_key' => array(
+				'type' 			=> 'varchar',
+				'constraint'	=> '30',
+				'null'			=> FALSE,
+				'default'		=> ''
+			),
+			'setting_value' => array(
+				'type' 			=> 'text',
+				'null'			=> FALSE
+			),
+			'serialized' => array(
+				'type' => 'int',
+				'constraint' => 1,
+				'null' => TRUE,
+				'default' => '0'
+			)										
 		);
 
 		$this->EE->dbforge->add_field($fields);
@@ -185,81 +203,81 @@ class Flag_master_upd
 	{
 		$this->EE->load->dbforge();
 		$fields = array(
-				'id'	=> array(
-						'type'			=> 'int',
-						'constraint'	=> 10,
-						'unsigned'		=> TRUE,
-						'null'			=> FALSE,
-						'auto_increment'=> TRUE
-				),
-				'name'	=> array(
-						'type' 			=> 'varchar',
-						'constraint'	=> '100',
-						'null'			=> FALSE,
-						'default'		=> ''
-				),
-				'active' => array(
-						'type' => 'tinyint',
-						'constraint' => 1,
-						'null' => TRUE,
-						'default' => '0'
-				),
-				'type'	=> array(
-						'type' 			=> 'varchar',
-						'constraint'	=> '100',
-						'null'			=> FALSE,
-						'default'		=> ''
-				),
-				'created_by'	=> array(
-						'type' 			=> 'int',
-						'constraint'	=> 10,
-						'null'			=> FALSE,
-						'default'		=> '0'
-				),
-				'total_flags'	=> array(
-						'type' 			=> 'int',
-						'constraint'	=> 10,
-						'null'			=> FALSE,
-						'default'		=> '0'
-				),
-				'notify_emails'  => array(
-						'type' 			=> 'text',
-						'null'			=> FALSE
-				),
-				'notify_email_subject'	=> array(
-						'type' 			=> 'varchar',
-						'constraint'	=> '255',
-						'null'			=> FALSE,
-						'default'		=> ''
-				),	
-				'notify_email_message'  => array(
-						'type' 			=> 'text',
-						'null'			=> FALSE
-				),
-				'notify_email_mailtype'	=> array(
-						'type' 			=> 'varchar',
-						'constraint'	=> '10',
-						'null'			=> FALSE,
-						'default'		=> ''
-				),		
-				'notify_email_multiplier'	=> array(
-						'type' 			=> 'int',
-						'constraint'	=> 3,
-						'null'			=> FALSE,
-						'default'		=> '0'
-				),
-				'auto_close_threshold'	=> array(
-						'type' 			=> 'int',
-						'constraint'	=> 10,
-						'null'			=> FALSE,
-						'default'		=> '0'
-				),
-				'last_modified'	=> array(
-						'type' 			=> 'datetime'
-				),
-				'created_date'	=> array(
-						'type' 			=> 'datetime'
-				)
+			'id'	=> array(
+					'type'			=> 'int',
+					'constraint'	=> 10,
+					'unsigned'		=> TRUE,
+					'null'			=> FALSE,
+					'auto_increment'=> TRUE
+			),
+			'name'	=> array(
+					'type' 			=> 'varchar',
+					'constraint'	=> '100',
+					'null'			=> FALSE,
+					'default'		=> ''
+			),
+			'active' => array(
+					'type' => 'tinyint',
+					'constraint' => 1,
+					'null' => TRUE,
+					'default' => '0'
+			),
+			'type'	=> array(
+					'type' 			=> 'varchar',
+					'constraint'	=> '100',
+					'null'			=> FALSE,
+					'default'		=> ''
+			),
+			'created_by'	=> array(
+					'type' 			=> 'int',
+					'constraint'	=> 10,
+					'null'			=> FALSE,
+					'default'		=> '0'
+			),
+			'total_flags'	=> array(
+					'type' 			=> 'int',
+					'constraint'	=> 10,
+					'null'			=> FALSE,
+					'default'		=> '0'
+			),
+			'notify_emails'  => array(
+					'type' 			=> 'text',
+					'null'			=> FALSE
+			),
+			'notify_email_subject'	=> array(
+					'type' 			=> 'varchar',
+					'constraint'	=> '255',
+					'null'			=> FALSE,
+					'default'		=> ''
+			),	
+			'notify_email_message'  => array(
+					'type' 			=> 'text',
+					'null'			=> FALSE
+			),
+			'notify_email_mailtype'	=> array(
+					'type' 			=> 'varchar',
+					'constraint'	=> '10',
+					'null'			=> FALSE,
+					'default'		=> ''
+			),		
+			'notify_email_multiplier'	=> array(
+					'type' 			=> 'int',
+					'constraint'	=> 3,
+					'null'			=> FALSE,
+					'default'		=> '0'
+			),
+			'auto_close_threshold'	=> array(
+					'type' 			=> 'int',
+					'constraint'	=> 10,
+					'null'			=> FALSE,
+					'default'		=> '0'
+			),
+			'last_modified'	=> array(
+					'type' 			=> 'datetime'
+			),
+			'created_date'	=> array(
+					'type' 			=> 'datetime'
+			)
 		);
 	
 		$this->EE->dbforge->add_field($fields);

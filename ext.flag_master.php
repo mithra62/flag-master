@@ -49,6 +49,10 @@ class Flag_master_ext
 		$this->version = $config['version'];
 		$this->mod_name = $config['mod_url_name'];
 		$this->ext_class_name = $config['ext_class_name'];
+		
+		$this->EE->load->library('flag_master_lib');
+		$this->EE->load->library('flag_master_profiles');
+		$this->EE->lang->loadfile('flag_master');		
 	}
 	
 	public function settings_form()
@@ -56,11 +60,30 @@ class Flag_master_ext
 		$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=settings');
 	}
 	
+	/**
+	 * Adds additional template tags to the comment template tag
+	 * @param string $tagdata
+	 * @param array $row
+	 * @return string
+	 */
 	public function comment_entries_tagdata($tagdata, $row)
 	{
 		$total = (string)$this->EE->flag_master_flags->get_total_flags($row['comment_id'], 'comment');
-		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:total_flags', $total, $tagdata);
+		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:comment_total_flags', $total, $tagdata);
 		return $tagdata;
+	}
+	
+	/**
+	 * Adds additional template tags to the entry template tag
+	 * @param string $tagdata
+	 * @param array $row
+	 * @return string
+	 */
+	public function channel_entries_tagdata($tagdata, $row)
+	{
+		$total = (string)$this->EE->flag_master_flags->get_total_flags($row['entry_id'], 'entry');
+		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:entry_total_flags', $total, $tagdata);
+		return $tagdata;		
 	}
 	
 	public function void()

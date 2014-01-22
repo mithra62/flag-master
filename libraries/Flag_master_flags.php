@@ -215,7 +215,7 @@ class Flag_master_flags
 	public function get_total_flags($entry_id, $type = 'entry')
 	{
 		$return = '0';
-		$this->EE->db->select("COUNT(fmf.id) AS total_entry_flags");
+		$this->EE->db->select("COUNT(fmf.id) AS total_entry_flags, fmf.entry_id");
 		$this->EE->db->from('flag_master_flags fmf');
 		$this->EE->db->join('flag_master_profiles fmp', 'fmf.profile_id = fmp.id');	
 		$this->EE->db->where('fmp.type', $type);
