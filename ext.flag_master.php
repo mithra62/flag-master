@@ -41,7 +41,7 @@ class Flag_master_ext
 	{
 		$this->EE =& get_instance();
 		$path = dirname(realpath(__FILE__));
-		include_once $path.'/config'.EXT;
+		include $path.'/config'.EXT;
 		$this->description = $config['description'];
 		$this->docs_url = $config['docs_url'];
 		$this->class = $this->name = $config['class_name'];
@@ -56,6 +56,13 @@ class Flag_master_ext
 		$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=settings');
 	}
 	
+	public function comment_entries_tagdata($tagdata, $row)
+	{
+		$total = (string)$this->EE->flag_master_flags->get_total_flags($row['comment_id'], 'comment');
+		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:total_flags', $total, $tagdata);
+		return $tagdata;
+	}
+	
 	public function void()
 	{
 		
@@ -64,7 +71,6 @@ class Flag_master_ext
 	public function activate_extension() 
 	{
 		return TRUE;
-
 	}
 	
 	public function update_extension($current = '')

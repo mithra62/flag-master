@@ -21,6 +21,6 @@ $config['description'] = 'Allows visitors to flag entries and inform administrat
 $config['mod_url_name'] = strtolower($config['class_name']);
 $config['ext_class_name'] = $config['class_name'].'_ext';
 
-$config['version'] = '1.1.1';
+$config['version'] = '1.1.2';
 //$config['nsm_addon_updater']['versions_xml'] = 'http://mithra62.com/flag-master.xml';
 $config['docs_url'] = 'http://mithra62.com/docs/flag-master';
