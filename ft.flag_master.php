@@ -63,6 +63,7 @@ class Flag_master_ft extends EE_Fieldtype
 		$this->EE->load->library('table');
 		$this->EE->load->model('field_model');
 		$this->EE->load->helper('form');
+		$this->EE->load->remove_package_path();
 
 	}		
 
