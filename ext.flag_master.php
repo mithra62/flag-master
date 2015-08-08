@@ -50,8 +50,6 @@ class Flag_master_ext
 		$this->mod_name = $config['mod_url_name'];
 		$this->ext_class_name = $config['ext_class_name'];
 		
-		$this->EE->load->library('flag_master_lib');
-		$this->EE->load->library('flag_master_profiles');
 		$this->EE->lang->loadfile('flag_master');		
 	}
 	
@@ -68,6 +66,9 @@ class Flag_master_ext
 	 */
 	public function comment_entries_tagdata($tagdata, $row)
 	{
+		$this->EE->load->library('flag_master_lib');
+		$this->EE->load->library('flag_master_profiles');
+		
 		$total = (string)$this->EE->flag_master_flags->get_total_flags($row['comment_id'], 'comment');
 		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:comment_total_flags', $total, $tagdata);
 		return $tagdata;
@@ -81,6 +82,10 @@ class Flag_master_ext
 	 */
 	public function channel_entries_tagdata($tagdata, $row)
 	{
+
+		$this->EE->load->library('flag_master_lib');
+		$this->EE->load->library('flag_master_profiles');
+				
 		$total = (string)$this->EE->flag_master_flags->get_total_flags($row['entry_id'], 'entry');
 		$tagdata = $this->EE->TMPL->swap_var_single('flag_master:entry_total_flags', $total, $tagdata);
 		return $tagdata;		

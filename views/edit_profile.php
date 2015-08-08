@@ -1,3 +1,4 @@
+<?php $this->load->view('errors'); ?>
 <div class="fm_top_nav">
 	<div class="fm_nav">
 		<span class="button"> 

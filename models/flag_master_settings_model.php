@@ -33,9 +33,11 @@ class Flag_master_settings_model extends CI_Model
 	 * @var array
 	 */
 	public $_defaults = array(
-						'license_number' => '',
-						'disable_accordions' => FALSE,
-						'flag_master_date_format' => '%M %d, %Y, %h:%i:%s%A',
+		'license_number' => '',
+		'license_check' => 0,
+		'license_status' => '1',
+		'disable_accordions' => FALSE,
+		'flag_master_date_format' => '%M %d, %Y, %h:%i:%s%A',
 	);
 	
 	/**

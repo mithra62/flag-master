@@ -26,7 +26,7 @@ class Flag_master_flags
 	{
 		$this->EE =& get_instance();
 		$this->EE->load->model('Flag_master_flags_model', 'flag_master_flags_model');
-		$this->EE->load->library('channel_data');
+		$this->EE->load->library('Flag_master_channel_data');
 		$this->settings = $this->EE->flag_master_lib->get_settings();
 	}
 	
@@ -266,12 +266,12 @@ class Flag_master_flags
 				switch($profile_data['type'])
 				{
 					case 'entry':
-						$this->EE->channel_data->update_entry_status($entry_id, 'closed');
+						$this->EE->flag_master_channel_data->update_entry_status($entry_id, 'closed');
 					break;
 					
 					default:
 					case 'comment':
-						$this->EE->channel_data->update_comment_status($entry_id, 'c');
+						$this->EE->flag_master_channel_data->update_comment_status($entry_id, 'c');
 					break;
 				}
 				$this->send_status_notification($profile_data, $entry_id);
@@ -317,7 +317,7 @@ class Flag_master_flags
 		if($type == 'comment')
 		{
 			$comment_id = $entry_id;
-			$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+			$comment_data = $this->EE->flag_master_channel_data->get_comments(array('comment_id' => $comment_id));
 			if(isset($comment_data['0']['entry_id']))
 			{
 				$entry_id = $comment_data['0']['entry_id'];
@@ -336,7 +336,7 @@ class Flag_master_flags
 				if($channel_field)
 				{
 					//$data = array($channel_field => )
-					$field_data = $this->EE->channel_data->get_custom_field_data($channel_field, array('entry_id' => $entry_id));
+					$field_data = $this->EE->flag_master_channel_data->get_custom_field_data($channel_field, array('entry_id' => $entry_id));
 					if($field_data == '')
 					{
 						$field_data = '0';
@@ -465,7 +465,7 @@ class Flag_master_flags
 			case 'comment':
 				$entry_url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=addons_modules&M=show_module_cp&module=comment&method=edit_comment_form&comment_id='.$entry_id;
 				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_comment_flag_option&option_id='.$flag_data['option_id'].'&comment_id='.$entry_id;
-				$flagged_item = $this->EE->channel_data->get_comments(array('comment_id' => $entry_id));
+				$flagged_item = $this->EE->flag_master_channel_data->get_comments(array('comment_id' => $entry_id));
 				$flagged_item = (isset($flagged_item['0']['comment']) ? $flagged_item['0']['comment'] : '');
 			break;
 			
@@ -473,7 +473,7 @@ class Flag_master_flags
 			default:
 				$entry_url = $this->EE->config->config['cp_url'].'?S='.$this->EE->session->userdata('fingerprint').'&D=cp&C=content_publish&M=entry_form&entry_id='.$entry_id;	
 				$view_flag_url = $this->EE->flag_master_lib->get_url_base().'view_profile&profile_id='.$profile_data['profile_id'];	
-				$flagged_item = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));				
+				$flagged_item = $this->EE->flag_master_channel_data->get_entry(array('entry_id' => $entry_id));				
 				$flagged_item = (isset($flagged_item['0']['title']) ? $flagged_item['0']['title'].' ('.$flagged_item['0']['channel_name'].')' : '');
 				
 

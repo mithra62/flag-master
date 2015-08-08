@@ -184,7 +184,7 @@ class Flag_master_upd
 			),
 			'setting_value' => array(
 				'type' 			=> 'text',
-				'null'			=> FALSE
+				'null'			=> TRUE
 			),
 			'serialized' => array(
 				'type' => 'int',

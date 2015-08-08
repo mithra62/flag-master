@@ -69,9 +69,10 @@ class Flag_master_mcp
 		$this->EE->load->helper('form');
 		$this->EE->load->helper('text');
 		$this->EE->load->library('form_validation');
+		$this->EE->form_validation->set_error_delimiters('<div class="flag_master_error">', '</div>');
 
 		$this->EE->load->helper('utilities');
-		$this->EE->load->library('channel_data');
+		$this->EE->load->library('flag_master_channel_data');
 		$this->EE->load->library('flag_master_lib');
 		$this->EE->load->library('flag_master_profiles');
 		$this->EE->load->library('flag_master_js');
@@ -82,19 +83,10 @@ class Flag_master_mcp
 		$this->url_base = BASE.AMP.$this->query_base;
 		$this->EE->flag_master_lib->set_url_base($this->url_base);
 		
-		$this->EE->cp->set_variable('url_base', $this->url_base);
-		$this->EE->cp->set_variable('query_base', $this->query_base);
-		
 		$this->EE->cp->set_breadcrumb(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name, $this->EE->lang->line('flag_master_module_name'));
 		$this->EE->cp->set_right_nav($this->EE->flag_master_lib->get_right_menu());	
 		
 		$this->errors = $this->EE->flag_master_lib->error_check();
-		
-		$this->EE->cp->set_variable('errors', $this->errors);
-		$this->EE->cp->set_variable('settings', $this->settings);
-		$this->EE->cp->set_variable('theme_folder_url', $this->EE->config->item('theme_folder_url'));
-		$this->EE->cp->set_variable('statuses', $this->EE->flag_master_profiles_model->statuses);
-		$this->EE->cp->set_variable('profile_types', $this->EE->flag_master_profiles_model->profile_types);
 
 		$ignore_methods = array('profiles');
 		$method = $this->EE->input->get('method', TRUE);
@@ -104,6 +96,21 @@ class Flag_master_mcp
 		}
 
 		$this->add_breadcrumb($this->url_base.'index', lang('flag_master_module_name'));
+
+		$this->EE->cp->add_to_foot('<link type="text/css" rel="stylesheet" href="'.$this->EE->config->config['theme_folder_url'].'/third_party/flag_master/css/flag_master.css" />');
+		ee()->cp->add_to_foot('<script type="text/javascript" src="'.ee()->config->config['theme_folder_url'].'third_party/flag_master/js/flag_master.js"></script>');
+		$this->EE->load->vars(
+			array(
+				'url_base' => $this->url_base,
+				'query_base' => $this->query_base,
+				'errors' => $this->errors,
+				'settings' => $this->settings,
+				'theme_folder_url' => $this->EE->config->item('theme_folder_url'),
+				'statuses' => $this->EE->flag_master_profiles_model->statuses,
+				'profile_types' => $this->EE->flag_master_profiles_model->profile_types,
+				'disable_accordions' => $this->settings['disable_accordions']
+			)
+		);		
 	}
 	
 	private function add_breadcrumb($link, $title)
@@ -118,7 +125,8 @@ class Flag_master_mcp
 		$this->EE->jquery->tablesorter('#flagged_comments table', '{headers: {5: {sorter: false}}, widgets: ["zebra"], sortList: [[4,1]]}');
 		$this->EE->jquery->tablesorter('#flagged_entries table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->javascript->compile();		
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('dashboard'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('dashboard');
+		
 		$vars = array();
 		$vars['flagged_comments'] = $this->EE->flag_master_flags->get_flagged_comments();
 		$vars['flagged_entries'] = $this->EE->flag_master_flags->get_flagged_entries();
@@ -133,13 +141,14 @@ class Flag_master_mcp
 		$vars = array();
 		$vars['errors'] = $this->errors;	
 		$vars['profiles'] = $this->EE->flag_master_profiles->get_profiles();
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('profiles'));
+		
+		$this->EE->view->cp_page_title = $this->EE->lang->line('profiles');
 		return $this->EE->load->view('profiles', $vars, TRUE);
 	}
 	
 	public function add_profile()
 	{
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('add_profile'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('add_profile');
 		$this->EE->form_validation->set_rules('name', 'Name', 'required');
 		
 		if ($this->EE->form_validation->run() == TRUE)
@@ -196,7 +205,7 @@ class Flag_master_mcp
 		
 		//$flagged_items = $this->EE->flag_master_flags->get_flags();
 		
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_profile'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_profile');
 		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));		
 		
 		$vars['profile_data'] = $profile_data;
@@ -246,7 +255,7 @@ class Flag_master_mcp
 		$this->EE->javascript->output($this->EE->flag_master_js->get_form_profile());
 		$this->EE->javascript->compile();
 				
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('edit_profile'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('edit_profile');
 		
 		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
 		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$profile_data['id'], $profile_data['name']);
@@ -279,8 +288,12 @@ class Flag_master_mcp
 			}
 		}
 
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('delete_profiles_confirm'));
-		$this->EE->cp->set_variable('delete_profiles_question', $this->EE->lang->line('delete_profiles_confirm'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('delete_profiles_confirm');
+		$this->EE->load->vars(
+			array(
+				'delete_profiles_question' => $this->EE->lang->line('delete_profiles_confirm'),
+			)
+		);		
 
 		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
 	
@@ -324,8 +337,8 @@ class Flag_master_mcp
 			$this->EE->functions->redirect($this->url_base.'profiles');
 			exit;
 		}		
-				
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('add_option'));
+		
+		$this->EE->view->cp_page_title = $this->EE->lang->line('add_option');
 		$this->EE->form_validation->set_rules('title', 'Title', 'required');
 		if ($this->EE->form_validation->run() == TRUE)
 		{
@@ -378,7 +391,7 @@ class Flag_master_mcp
 		$where = array('id' => $option_data['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 		
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_option'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_option');
 
 		$this->add_breadcrumb($this->url_base.'profiles', lang('profiles'));
 		$this->add_breadcrumb($this->url_base.'view_profile'.AMP.'profile_id='.$profile_data['id'], $profile_data['name']);		
@@ -411,9 +424,16 @@ class Flag_master_mcp
 		exit;
 	}
 	
+	public function l()
+	{
+		session_write_close();
+		ee()->flag_master_lib->l();
+		exit;
+	}
+	
 	public function view_entry_flags()
 	{
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_flags'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_entry_flags');
 		$entry_id = $this->EE->input->get_post('entry_id', FALSE);
 		if(!$entry_id)
 		{
@@ -459,7 +479,8 @@ class Flag_master_mcp
 	
 	public function view_entry_comment_flags()
 	{
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_comment_flags'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_entry_comment_flags');
+		
 		$entry_id = $this->EE->input->get_post('entry_id', FALSE);
 		if(!$entry_id)
 		{
@@ -547,7 +568,9 @@ class Flag_master_mcp
 		$vars['profile_id'] = $option_data['profile_id'];
 		$vars['entry_flags'] = $entry_flags;
 		
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_entry_flags').' ('.$option_data['title'].')');
+		
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_entry_flags').' ('.$option_data['title'].')';
+		
 		$this->EE->cp->add_js_script('ui', 'accordion');
 		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
 		$this->EE->javascript->output($this->EE->flag_master_js->get_user_defined_dialogs($entry_flags));
@@ -558,7 +581,8 @@ class Flag_master_mcp
 	
 	public function view_comment_flags()
 	{
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_comment_flags'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_comment_flags');
+		
 		$comment_id = $this->EE->input->get_post('comment_id', FALSE);
 		if(!$comment_id)
 		{
@@ -622,7 +646,7 @@ class Flag_master_mcp
 			exit;
 		}
 	
-		$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+		$comment_data = $this->EE->flag_master_channel_data->get_comments(array('comment_id' => $comment_id));
 		if(!$comment_data || !isset($comment_data['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('comment_not_found'));
@@ -650,7 +674,8 @@ class Flag_master_mcp
 		$vars['entry_flags'] = $entry_flags;
 		$vars['flag_meta'] = $flag_meta;
 	
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('view_comment_flags').' ('.$option_data['title'].')');
+		$this->EE->view->cp_page_title = $this->EE->lang->line('view_comment_flags').' ('.$option_data['title'].')';
+		
 		$this->EE->jquery->tablesorter('#all_flags table', '{headers: {4: {sorter: false}}, widgets: ["zebra"], sortList: [[3,1]]}');
 		$this->EE->cp->add_js_script('ui', 'accordion');
 		$this->EE->cp->add_js_script(array('plugin' => array('overlay', 'overlay.apple')));
@@ -681,8 +706,12 @@ class Flag_master_mcp
 			}
 		}
 	
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('delete_flags_confirm'));
-		$this->EE->cp->set_variable('delete_flags_question', $this->EE->lang->line('delete_flags_confirm'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('delete_flags_confirm');
+		$this->EE->load->vars(
+			array(
+				'delete_flags_question' => $this->EE->lang->line('delete_flags_confirm'),
+			)
+		);	
 	
 		$vars = array();
 		$vars['form_action'] = $this->query_base.'delete_flags';
@@ -728,8 +757,12 @@ class Flag_master_mcp
 			}
 		}
 	
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('delete_options_confirm'));
-		$this->EE->cp->set_variable('delete_options_question', $this->EE->lang->line('delete_options_confirm'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('delete_options_confirm');
+		$this->EE->load->vars(
+			array(
+				'delete_options_question' => $this->EE->lang->line('delete_options_confirm'),
+			)
+		);	
 	
 		$vars = array();
 		$vars['form_action'] = $this->query_base.'delete_options';
@@ -800,7 +833,8 @@ class Flag_master_mcp
 			}
 		}
 	
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('edit_option'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('edit_option');
+		
 		$where = array('id' => $option_data['profile_id']);
 		$profile_data = $this->EE->flag_master_profiles->get_profile($where);
 
@@ -832,7 +866,7 @@ class Flag_master_mcp
 			}
 		}
 		
-		$this->EE->cp->set_variable('cp_page_title', $this->EE->lang->line('settings'));
+		$this->EE->view->cp_page_title = $this->EE->lang->line('settings');
 		
 		$this->EE->cp->add_js_script('ui', 'accordion'); 
 		$this->EE->javascript->compile();

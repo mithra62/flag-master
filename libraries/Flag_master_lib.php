@@ -40,9 +40,9 @@ class Flag_master_lib
 	public function get_right_menu()
 	{
 		return array(
-				'dashboard'		=> $this->url_base.'index',
-				'profiles'		=> $this->url_base.'profiles',
-				'settings'	=> $this->url_base.'settings'
+			'dashboard'		=> $this->url_base.'index',
+			'profiles'		=> $this->url_base.'profiles',
+			'settings'	=> $this->url_base.'settings'
 		);
 	}	
 	
@@ -104,6 +104,18 @@ class Flag_master_lib
 		{
 			$errors['license_number'] = 'missing_license_number';
 		}
+		else 
+		{
+			if(!$this->valid_license($this->settings['license_number']))
+			{
+				$errors['license_number'] = 'invalid_license_number';
+			}
+			elseif($this->settings['license_status'] != '1')
+			{
+				$errors['license_number'] = 'invalid_license_number';
+			}
+		}
+		
 		return $errors;
 	}
 
@@ -157,7 +169,53 @@ class Flag_master_lib
 	{
 		//return TRUE; //if you want to disable the check uncomment this line. You should pay me though eric@mithra62.com :) 
 		return preg_match("/^([a-z0-9]{8})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{12})$/", $license);
-	}	
+	}
+	
+	/**
+	 * Verify license is valid
+	 * @param string $force
+	 */
+	public function l($force = false)
+	{
+		if( $this->settings['license_number'] )
+		{
+			$license_check = $this->settings['license_check'];
+			$next_notified = mktime(date('G', $license_check)+24, date('i', $license_check), 0, date('n', $license_check), date('j', $license_check), date('Y', $license_check));
+	
+			if(time() > $next_notified || $force)
+			{
+				//license_check
+				$get = array(
+						'ip' => (ee()->input->ip_address()),
+						'key' => ($this->settings['license_number']),
+						'site_url' => (ee()->config->config['site_url']),
+						'webmaster_email' => (ee()->config->config['webmaster_email']),
+						'add_on' => ('flag-master'),
+						'version' => ('1.2.2')
+				);
+	
+				$url = 'https://mithra62.com/license-check/'.base64_encode(json_encode($get));
+				$ch = curl_init($url);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1");
+				$response = urldecode(curl_exec($ch));
+	
+				$json = json_decode($response, true);
+				if($json && isset($json['valid']))
+				{
+					ee()->flag_master_settings->update_setting('license_status', $json['valid']);
+				}
+				else 
+				{
+					ee()->flag_master_settings->update_setting('license_status', '0');
+				}
+			}
+	
+			ee()->flag_master_settings->update_setting('license_check', time());
+		}
+	}		
 	
 	/**
 	 * Returns the setting array and caches it if none exists

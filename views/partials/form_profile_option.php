@@ -1,4 +1,3 @@
-<?php $this->load->view('errors'); ?>
 <?php 
 
 $tmpl = array (

@@ -93,9 +93,12 @@ class Flag_master_ft extends EE_Fieldtype
 		$this->query_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->mod_name.AMP.'method=';
 		$this->url_base = BASE.AMP.$this->query_base;
 		$this->EE->flag_master_lib->set_url_base($this->url_base);
-		
-		$this->EE->cp->set_variable('url_base', $this->url_base);
-		$this->EE->cp->set_variable('query_base', $this->query_base);
+		$this->EE->load->vars(
+			array(
+				'url_base' => $this->url_base,
+				'query_base' => $this->query_base
+			)
+		);	
 		
 		$this->EE->jquery->tablesorter('#flag_master_ft_'.$field_settings['flag_type'].' table', '{headers: {5: {sorter: false}}, widgets: ["zebra"], sortList: [[0,1]]}');
 		$this->EE->javascript->compile();

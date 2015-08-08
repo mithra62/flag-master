@@ -14,6 +14,8 @@ $lang = array(
 'no_profiles' => 'No Profiles Found',
 'add_profile' => 'Add Profile',
 'view_profile' => 'View Profile',
+'missing_license_number' => 'Please enter your license number. <a href="#config_url#">Enter License</a> or <a href="https://www.mithra62.com/projects/view/flag-master">Buy A License</a>',		
+'invalid_license_number' => 'Your license number is invalid. Please <a href="#config_url#">enter your valid license</a> or <a href="https://mithra62.com/projects/view/flag-master">buy a license</a>.',
 'edit_profile' => 'Edit Profile',
 'profile_not_found' => 'Profile Not Found',	
 'back_to_profile' => 'Back To Profile',	

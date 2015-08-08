@@ -20,7 +20,7 @@
  * @author		Eric Lamb
  * @filesource 	./system/expressionengine/third_party/flag_master/libraries/Channel_data.php
  */
-class Channel_data
+class Flag_master_channel_data
 {
 	/**
 	 * Channel Title Keys
@@ -47,7 +47,7 @@ class Channel_data
 		$this->EE->api->instantiate('channel_entries');
 		$this->EE->api->instantiate('channel_fields');
 		$this->EE->load->helper('custom_field');
-		$this->EE->load->library('member_data');
+		$this->EE->load->library('flag_master_member_data');
 	}
 	
 	public function get_entries(array $where)
@@ -135,7 +135,7 @@ class Channel_data
 			$data[$key]['channel_name'] = $channel_data->channel_name;
 			if(isset($entry['author_id']))
 			{
-				//$data[$key]['author_data'] = $this->EE->member_data->get_member($entry['author_id']);
+				//$data[$key]['author_data'] = $this->EE->flag_master_member_data->get_member($entry['author_id']);
 			}			
 			
 			foreach($channel_fields AS $field)
@@ -305,7 +305,7 @@ class Channel_data
 					$return[$i]['channel_file'][$key] = $value;
 					if($key == 'member_id')
 					{
-						$return[$i]['channel_file']['member_info'] = $this->EE->member_data->get_member($value);
+						$return[$i]['channel_file']['member_info'] = $this->EE->flag_master_member_data->get_member($value);
 					}
 				}
 				$i++;
@@ -325,7 +325,7 @@ class Channel_data
 			{
 				if($member != '')
 				{
-					$return[$i]['member'][$i] = $this->EE->member_data->get_member($member);
+					$return[$i]['member'][$i] = $this->EE->flag_master_member_data->get_member($member);
 				}
 				$i++;
 			}
