@@ -442,7 +442,7 @@ class Flag_master_mcp
 			exit;
 		}
 		
-		$entry_data = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));
+		$entry_data = $this->EE->flag_master_channel_data->get_entry(array('entry_id' => $entry_id));
 		if(!$entry_data || !isset($entry_data['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('entry_not_found'));
@@ -489,7 +489,7 @@ class Flag_master_mcp
 			exit;
 		}
 	
-		$entry_data = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));
+		$entry_data = $this->EE->flag_master_channel_data->get_entry(array('entry_id' => $entry_id));
 		if(!$entry_data || !isset($entry_data['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('entry_not_found'));
@@ -543,7 +543,7 @@ class Flag_master_mcp
 			exit;			
 		}
 		
-		$entry_data = $this->EE->channel_data->get_entry(array('entry_id' => $entry_id));
+		$entry_data = $this->EE->flag_master_channel_data->get_entry(array('entry_id' => $entry_id));
 		if(!$entry_data || !isset($entry_data['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('entry_not_found'));
@@ -591,7 +591,7 @@ class Flag_master_mcp
 			exit;
 		}
 	
-		$comment_data = $this->EE->channel_data->get_comments(array('comment_id' => $comment_id));
+		$comment_data = $this->EE->flag_master_channel_data->get_comments(array('comment_id' => $comment_id));
 		if(!$comment_data || !isset($comment_data['0']))
 		{
 			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('comment_not_found'));
